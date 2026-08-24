@@ -1,0 +1,5 @@
+Journal ID,Date,Account,Invoice Ref,Amount,Currency
+JE-1,2026-07-01,Revenue,INV-1001,10000,AED
+JE-2,2026-07-02,Revenue,INV-1002,10000,AED
+JE-3,2026-07-03,Revenue,INV-1003,894,AED
+

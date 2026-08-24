@@ -1,0 +1,10 @@
+services:
+  fincompiler:
+    build: .
+    ports:
+      - "127.0.0.1:8501:8501"
+    volumes:
+      - ./local-data:/app/local-data
+      - ./output:/app/output
+      - ./mappings:/app/mappings
+

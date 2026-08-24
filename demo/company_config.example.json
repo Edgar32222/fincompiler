@@ -1,0 +1,7 @@
+{
+  "company_name": "Example Company",
+  "base_currency": "AED",
+  "revenue_accounts": ["4000", "4010"],
+  "reconciliation_tolerance": "0.01"
+}
+

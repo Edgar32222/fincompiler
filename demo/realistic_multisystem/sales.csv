@@ -1,0 +1,6 @@
+InvoiceNumber,Date,DueDate,ContactName,ItemCode,Description,Quantity,UnitAmount,DiscountAmount,LineAmount,TaxAmount,CurrencyCode,CurrencyRate,Status,AccountCode
+INV-X1001,2026-07-01,2026-07-31,Orion Retail,KETTLE-A,Electric kettle,100,100,500,9500,475,AED,1.000000,AUTHORISED,4000
+INV-X1001,2026-07-01,2026-07-31,Orion Retail,FREIGHT,Delivery service,1,500,0,500,25,AED,1.000000,AUTHORISED,4010
+INV-X1002,2026-07-02,2026-08-01,Atlas Stores,TOASTER-B,Four slice toaster,50,200,0,10000,500,AED,1.000000,AUTHORISED,4000
+INV-X1003,2026-07-03,2026-08-02,Orion Retail,TOASTER-B,Four slice toaster,20,180,0,3600,180,AED,1.000000,AUTHORISED,4000
+

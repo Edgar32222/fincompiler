@@ -1,0 +1,73 @@
+# FinCompiler v0.3.0-alpha.1
+
+> **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
+
+FinCompiler turns messy monthly finance files into traceable, deterministic management analysis. It is local-first: source data, mapping memory and outputs stay on the machine.
+
+## Trust rules
+
+- Unknown or ambiguous fields are placed in `MAPPING_REVIEW_REQUIRED`; they are never silently coerced.
+- Confirmed mappings persist in a local JSON memory. A changed header set raises `SCHEMA_DRIFT`.
+- Every aggregate carries file, sheet, row, source field and raw value lineage.
+- Recognized Xero, QuickBooks, Business Central and Dynamics field sets use explicit source profiles backed by public vendor schemas.
+- Dates, currencies and numeric values are type-checked; locale-ambiguous dates are blocked rather than guessed.
+- Sales-to-GL reconciliation identifies invoice-level missing, unmatched and amount-mismatch causes.
+- Budget-vs-Actual PVM uses Python `Decimal`. An LLM may explain the resulting JSON, but never calculates or adjusts amounts.
+- A blocking reconciliation or unresolved mapping prevents output readiness.
+
+## Quick start (Windows)
+
+The simplest path is `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`. It detects the standard Python launcher, `python`, or the Codex bundled Python runtime.
+
+```powershell
+py -m venv .venv
+.venv\Scripts\pip install -e .[dev,excel,web]
+.venv\Scripts\pytest
+.venv\Scripts\fincompiler run demo\nova_appliances --output output
+.venv\Scripts\fincompiler-web
+```
+
+The demo deliberately contains an AED 2,706 difference on `INV-1003`, plus an unmapped Chinese OPEX field in `opex_dirty.csv` for review scenarios.
+
+`demo/realistic_multisystem` adds Xero-style multi-line invoices and a Dynamics-style general journal with separate debit/credit and reporting-currency fields. Its values are synthetic; the field shapes are documented in [docs/FIELD_EVIDENCE.md](docs/FIELD_EVIDENCE.md).
+
+## Mapping confirmation
+
+Review a proposal, then explicitly save a mapping:
+
+```powershell
+fincompiler confirm-mapping sales "Invoice No" invoice_id --fields "Invoice No" Date Customer SKU Qty "Unit Price" "Net Sales" Currency
+```
+
+Re-running the same schema uses persistent memory. New, removed or renamed columns raise schema drift.
+
+## Outputs
+
+`management_pack.json` contains mapping proposals, exceptions, output readiness, source-backed reconciliation and the balanced PVM bridge. No data leaves the machine.
+
+Full lineage is stored in an indexed `lineage-<run_id>.sqlite` file. Management Pack totals contain a stable lineage ID, input count and small preview. Retrieve a page without loading the entire history:
+
+```powershell
+fincompiler trace output\lineage-<run_id>.sqlite "<run_id>:reconciliation:sales" --limit 25 --offset 0
+```
+
+Each run also writes `run_manifest.json` with SHA-256 hashes for Sales, GL and Budget, a configuration hash, engine version and deterministic run ID. Exact duplicate canonical Sales/GL records block output readiness.
+
+## Finance sign-off
+
+After resolving exceptions and reviewing the pack:
+
+```powershell
+fincompiler sign-off output\demo-run --reviewer "Finance Manager" --notes "Reviewed against July close workbook"
+fincompiler verify-run output\demo-run
+```
+
+A signed run cannot be overwritten. Any later artifact change causes verification to fail.
+
+## Current capacity boundary
+
+The recorded baseline covers 9,994 Sales lines plus 5,002 GL lines. Use the alpha for evaluation packs up to roughly 25,000 combined source rows; larger runs may work but are not yet a release claim. See [docs/DATA_STRATEGY.md](docs/DATA_STRATEGY.md).
+
+For evidence behind vendor-specific fields, see [docs/FIELD_EVIDENCE.md](docs/FIELD_EVIDENCE.md). For structured finance-user validation, see [docs/PILOT_GUIDE.md](docs/PILOT_GUIDE.md).
+
+When real enterprise exports are not available, use the seeded scenario generator and truth manifest described in [docs/DATA_STRATEGY.md](docs/DATA_STRATEGY.md). Company-specific revenue accounts, base currency and reconciliation tolerance belong in `company_config.json`; see [demo/company_config.example.json](demo/company_config.example.json).

@@ -1,0 +1,5 @@
+Invoice No,Date,Customer,SKU,Qty,Unit Price,Net Sales,Currency
+INV-1001,2026-07-01,Orion Retail,KETTLE-A,100,100,10000,AED
+INV-1002,2026-07-02,Atlas Stores,TOASTER-B,50,200,10000,AED
+INV-1003,2026-07-03,Orion Retail,TOASTER-B,20,180,3600,AED
+
