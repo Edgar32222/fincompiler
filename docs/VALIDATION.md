@@ -1,4 +1,4 @@
-# v0.5 validation record
+# v0.6 validation record
 
 ## Acceptance scenarios
 
@@ -34,13 +34,17 @@
 30. Excel uploads retain their workbook extension when staged under their selected business role.
 31. A blocked Management Pack cannot be signed off through the engine or web interface.
 32. Every run produces a self-contained HTML Management Pack containing readiness, deterministic differences and its run ID.
+33. UI-generated company policy requires at least one revenue account and a non-negative reconciliation tolerance.
+34. A 90-day ECB timeout falls back to the daily feed while retaining and displaying the original failure reason.
+35. A cached ECB reference book cannot enter an uploaded-file run until the company-policy approval checkbox is selected.
 
 ## v0.5 local-product acceptance
 
 - `Start FinCompiler.cmd` launched the local app on a clean alternate port and returned HTTP 200.
 - `Stop FinCompiler.cmd` stopped only the recorded FinCompiler Python process.
 - The redesigned sample workflow was browser-checked from first screen to `READY`, including the five result tabs and both report downloads.
-- The full automated suite passes: 32 tests.
+- The full automated suite passes: 35 tests.
+- A live UI fetch cached 1,885 ECB 90-day reference observations and displayed the explicit approval gate.
 
 ## Boundaries
 

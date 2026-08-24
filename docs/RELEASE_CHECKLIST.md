@@ -1,4 +1,4 @@
-# v0.5.0-alpha.1 release checklist
+# v0.6.0-alpha.1 release checklist
 
 ## Required and passing
 
@@ -25,6 +25,10 @@
 - [x] Engine-enforced prevention of blocked-run sign-off.
 - [x] Self-contained readable HTML Management Pack.
 - [x] Double-click Windows start and stop launchers.
+- [x] First-run company policy fields without requiring JSON authoring.
+- [x] Explicit block/upload/ECB foreign-currency basis selection.
+- [x] ECB cache fetch with source evidence and no calculation-time network call.
+- [x] Company approval gate before reference rates can be used.
 
 ## Alpha limitations disclosed
 

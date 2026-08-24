@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.0-alpha.1 — 2026-08-24
+
+- Added first-run company policy setup for entity name, base currency, GL revenue accounts and reconciliation tolerance.
+- Added an explicit foreign-currency basis choice: block, upload a company-approved book, or fetch an ECB reference cache.
+- Added a 90-day ECB download workflow with daily-feed fallback that retains the failure reason.
+- Required a visible company-policy approval checkbox before cached ECB reference rates can enter a run.
+- Preserved rate provider, source URL, fetch time, raw hash, effective date and matching formula in the run evidence.
+- Expanded automated coverage to 35 tests and browser-validated a live 1,885-observation ECB cache.
+
 ## 0.5.0-alpha.1 — 2026-08-24
 
 - Rebuilt the local web workflow around choose, review, investigate, audit and sign-off steps.

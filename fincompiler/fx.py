@@ -238,7 +238,7 @@ def refresh_ecb_rate_book(output_path: str | Path, history: str = "90d", timeout
     if history not in urls:
         raise ValueError("history must be one of: daily, 90d, full")
     source_url = urls[history]
-    request = urllib.request.Request(source_url, headers={"User-Agent": "FinCompiler/0.4"})
+    request = urllib.request.Request(source_url, headers={"User-Agent": "FinCompiler/0.6"})
     try:
         import certifi
 

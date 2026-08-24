@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
+from decimal import Decimal
 from pathlib import Path
 
 
@@ -36,6 +38,50 @@ def _stage_uploads(files: dict[str, object]) -> Path:
     return workspace
 
 
+def _write_company_config(
+    workspace: Path,
+    company_name: str,
+    base_currency: str,
+    revenue_accounts_text: str,
+    tolerance_text: str,
+    fx_rate_book: str | None,
+    rate_type: str,
+) -> Path:
+    accounts = [item.strip() for item in revenue_accounts_text.replace(";", ",").replace("\n", ",").split(",") if item.strip()]
+    if not accounts:
+        raise ValueError("Enter at least one GL revenue account name or code.")
+    tolerance = Decimal(tolerance_text)
+    if tolerance < 0:
+        raise ValueError("Reconciliation tolerance cannot be negative.")
+    payload = {
+        "company_name": company_name.strip() or "Unnamed company",
+        "base_currency": base_currency,
+        "revenue_accounts": accounts,
+        "reconciliation_tolerance": str(tolerance),
+        "fx_rate_book": fx_rate_book,
+        "fx_policy": {
+            "rate_type": rate_type,
+            "max_lookback_days": 7,
+            "allow_inverse": True,
+            "allow_cross": True,
+            "triangulation_currency": "EUR",
+            "prefer_accounting_currency_amount": True,
+        },
+    }
+    path = workspace / "company_config.json"
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def _refresh_ecb_with_fallback(target: Path, refresh_fn) -> dict:
+    try:
+        return refresh_fn(target, "90d")
+    except RuntimeError as exc:
+        result = refresh_fn(target, "daily")
+        result["fallback_reason"] = str(exc)
+        return result
+
+
 def _exception_action(code: str) -> str:
     actions = {
         "MAPPING_REVIEW_REQUIRED": "Confirm only the flagged source fields below, then run the check again.",
@@ -56,6 +102,7 @@ def render() -> None:
     import streamlit as st
 
     from . import __version__
+    from .fx import CURRENCY_MINOR_UNITS, refresh_ecb_rate_book
     from .lineage_store import LineageStore
     from .mapping import MappingMemory, SCHEMAS
     from .pipeline import compile_pack
@@ -75,6 +122,9 @@ def render() -> None:
             horizontal=True,
         )
         uploaded_files: dict[str, object] = {}
+        generated_company: dict[str, str] | None = None
+        rate_source = "Block foreign-currency records without an approved rate book"
+        approve_ecb_reference = False
         if source_mode == "Upload monthly files":
             st.caption("Choose each file by business role. Original filenames do not need to match FinCompiler names.")
             upload_columns = st.columns(3)
@@ -87,9 +137,55 @@ def render() -> None:
             uploaded_files["budget"] = upload_columns[2].file_uploader(
                 "Budget · required", type=["csv", "xlsx", "xlsm"], help="Customer/SKU plan used for the deterministic bridge."
             )
-            with st.expander("Optional company policy and exchange rates"):
+            with st.expander("Company policy and exchange rates", expanded=True):
                 uploaded_files["company_config"] = st.file_uploader("Company policy", type=["json"])
-                uploaded_files["fx_rates"] = st.file_uploader("Approved exchange-rate book", type=["csv"], key="fx-upload")
+                if uploaded_files["company_config"] is not None:
+                    st.caption("The uploaded policy controls base currency, revenue accounts, tolerance and rate-book use.")
+                    uploaded_files["fx_rates"] = st.file_uploader("Rate book referenced by that policy", type=["csv"], key="fx-upload")
+                else:
+                    policy_columns = st.columns(2)
+                    company_name = policy_columns[0].text_input("Company / entity name", "My company")
+                    currencies = sorted(CURRENCY_MINOR_UNITS)
+                    base_currency = policy_columns[1].selectbox("Accounting base currency", currencies, index=currencies.index("AED"))
+                    revenue_accounts = policy_columns[0].text_input("GL revenue accounts", "Revenue, Sales Revenue, 4000", help="Comma-separated names or codes.")
+                    tolerance = policy_columns[1].text_input("Reconciliation tolerance", "0.01")
+                    rate_source = st.selectbox(
+                        "Foreign-currency basis",
+                        [
+                            "Block foreign-currency records without an approved rate book",
+                            "Use an uploaded company-approved rate book",
+                            "Use a reviewed ECB reference-rate cache",
+                        ],
+                    )
+                    if rate_source == "Use an uploaded company-approved rate book":
+                        uploaded_files["fx_rates"] = st.file_uploader("Approved exchange-rate book", type=["csv"], key="fx-upload")
+                    elif rate_source == "Use a reviewed ECB reference-rate cache":
+                        st.warning("ECB rates are informational reference rates. Fetching them does not approve them for accounting use.")
+                        if st.button("Fetch latest 90-day ECB reference cache"):
+                            try:
+                                st.session_state.ecb_reference = _refresh_ecb_with_fallback(
+                                    Path(".fincompiler") / "rates" / "ecb-reference.csv", refresh_ecb_rate_book
+                                )
+                            except Exception as exc:
+                                st.error(str(exc))
+                        if "ecb_reference" in st.session_state:
+                            evidence = st.session_state.ecb_reference
+                            st.success(
+                                f"Cached {evidence['observations']} {evidence['history']} observations locally · "
+                                f"fetched {evidence['fetched_at']}"
+                            )
+                            if evidence.get("fallback_reason"):
+                                st.warning("The 90-day feed timed out, so only the daily feed was cached. Older transaction dates will remain blocked.")
+                            approve_ecb_reference = st.checkbox(
+                                "I confirm this company permits ECB reference rates for this analytical run.",
+                                help="This explicit approval is stored in the run configuration and evidence manifest.",
+                            )
+                    generated_company = {
+                        "company_name": company_name,
+                        "base_currency": base_currency,
+                        "revenue_accounts": revenue_accounts,
+                        "tolerance": tolerance,
+                    }
             input_dir = ""
         elif source_mode == "Use a prepared local folder":
             input_dir = st.text_input(
@@ -112,7 +208,31 @@ def render() -> None:
                 missing = [DATASET_LABELS[name] for name in DATASET_LABELS if uploaded_files.get(name) is None]
                 if missing:
                     raise ValueError("Choose all three required files: " + ", ".join(missing))
-                input_dir = str(_stage_uploads(uploaded_files))
+                workspace = _stage_uploads(uploaded_files)
+                if generated_company is not None:
+                    fx_rate_book = None
+                    rate_type = "transaction"
+                    if rate_source == "Use an uploaded company-approved rate book":
+                        if uploaded_files.get("fx_rates") is None:
+                            raise ValueError("Choose the company-approved exchange-rate book or select the blocking option.")
+                        fx_rate_book = "fx_rates.csv"
+                    elif rate_source == "Use a reviewed ECB reference-rate cache":
+                        evidence = st.session_state.get("ecb_reference")
+                        if not evidence or not approve_ecb_reference:
+                            raise ValueError("Fetch the ECB cache and explicitly approve its use for this analytical run.")
+                        shutil.copy2(evidence["file"], workspace / "fx_rates.csv")
+                        fx_rate_book = "fx_rates.csv"
+                        rate_type = "reference"
+                    _write_company_config(
+                        workspace,
+                        generated_company["company_name"],
+                        generated_company["base_currency"],
+                        generated_company["revenue_accounts"],
+                        generated_company["tolerance"],
+                        fx_rate_book,
+                        rate_type,
+                    )
+                input_dir = str(workspace)
             with st.spinner("Reading source files and running deterministic controls…"):
                 st.session_state.report = compile_pack(Path(input_dir), Path(output_folder), Path(memory_file))
             st.session_state.run_output_folder = output_folder

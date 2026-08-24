@@ -1,4 +1,4 @@
-# FinCompiler v0.5.0-alpha.1
+# FinCompiler v0.6.0-alpha.1
 
 > **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
 
@@ -28,6 +28,8 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 CSV, XLSX and XLSM input tables are supported. Uploads are selected by business role, so original filenames do not need to be changed. Prepared local folders use one explicitly named `sales`, `gl` and `budget` file; if both CSV and Excel versions exist, FinCompiler blocks the run instead of choosing silently.
 
 The result page provides an action plan, Sales-vs-GL investigation, deterministic Budget-vs-Actual bridge, applied FX evidence, paginated source trace, controlled sign-off and downloadable JSON plus a self-contained readable HTML Management Pack.
+
+When uploading files without a prepared company-policy JSON, the UI now collects the entity name, accounting base currency, explicit GL revenue accounts and reconciliation tolerance. Foreign-currency rows remain blocked unless the user uploads a company-approved rate book or explicitly fetches, reviews and approves an ECB reference-rate cache for that analytical run. Fetching rates alone never approves or applies them.
 
 ## Command-line setup (advanced)
 
