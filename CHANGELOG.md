@@ -7,7 +7,9 @@
 - Added a 90-day ECB download workflow with daily-feed fallback that retains the failure reason.
 - Required a visible company-policy approval checkbox before cached ECB reference rates can enter a run.
 - Preserved rate provider, source URL, fetch time, raw hash, effective date and matching formula in the run evidence.
-- Expanded automated coverage to 35 tests and browser-validated a live 1,885-observation ECB cache.
+- Added a self-contained Windows x64 portable build with a double-click desktop control window; end users no longer need Python or a terminal.
+- Separated bundled read-only demo resources from the writable local `FinCompiler Data` workspace.
+- Expanded automated coverage to 36 tests, browser-validated a live 1,885-observation ECB cache and ran the packaged sample workflow end to end.
 
 ## 0.5.0-alpha.1 — 2026-08-24
 

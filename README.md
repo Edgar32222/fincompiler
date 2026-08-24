@@ -17,13 +17,14 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 - Foreign-currency records use an explicit dated rate policy. Direct, inverse and cross-rate formulas retain provider, effective date, source and raw-response hash evidence.
 - ERP accounting-currency amounts can be used as posted accounting evidence when company policy explicitly allows it.
 
-## Start on Windows without using a terminal
+## Start on Windows — no Python required
 
-1. Keep the FinCompiler folder on your local drive.
-2. Double-click `Start FinCompiler.cmd`.
-3. On first use, FinCompiler creates its private Python environment, installs the required packages and runs its validation tests.
-4. Your browser opens at `http://127.0.0.1:8511`. Choose the sample company or upload one Sales, one GL and one Budget file.
-5. Double-click `Stop FinCompiler.cmd` when you finish.
+1. Download `FinCompiler-0.6.0-alpha.1-windows-x64-portable.zip` and extract the whole ZIP to a local folder.
+2. Double-click `FinCompiler.exe`. Keep the small FinCompiler control window open while you work.
+3. Your browser opens automatically. Choose the sample company or upload one Sales, one GL and one Budget file.
+4. Click **Stop and close** in the control window when you finish.
+
+The portable build includes its own runtime and dependencies. It does not install Python, does not require administrator access and binds only to `127.0.0.1`. User files, mapping memory, approved rate evidence and outputs are written under `FinCompiler Data` beside the executable; bundled demo resources remain separate.
 
 CSV, XLSX and XLSM input tables are supported. Uploads are selected by business role, so original filenames do not need to be changed. Prepared local folders use one explicitly named `sales`, `gl` and `budget` file; if both CSV and Excel versions exist, FinCompiler blocks the run instead of choosing silently.
 
@@ -33,7 +34,7 @@ When uploading files without a prepared company-policy JSON, the UI now collects
 
 ## Command-line setup (advanced)
 
-The simplest path is `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`. It detects the standard Python launcher, `python`, or the Codex bundled Python runtime.
+Source contributors can use `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`. This Python-based route is no longer the default end-user startup method.
 
 ```powershell
 py -m venv .venv
@@ -54,6 +55,8 @@ fincompiler refresh-ecb-rates .fincompiler\rates\ecb-reference.csv --history 90d
 ```
 
 ECB rates are informational reference rates. Downloading them never silently changes an existing run or makes them an approved accounting policy.
+
+Build the self-contained Windows folder from a prepared contributor environment with `scripts\build_windows_portable.ps1`. The resulting `dist-windows\FinCompiler` folder must be distributed intact, not as the executable alone.
 
 See [Currency and exchange-rate policy](docs/FX_POLICY.md) for quote conventions, matching order, evidence fields and blocking behavior.
 

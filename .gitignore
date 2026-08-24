@@ -8,6 +8,11 @@ __pycache__/
 build/
 dist/
 dist-release/
+dist-windows/
+build-windows/
+desktop/FinCompiler.spec
+FinCompiler Data/
+release/*.zip
 output/
 output-*/
 mappings/memory.json

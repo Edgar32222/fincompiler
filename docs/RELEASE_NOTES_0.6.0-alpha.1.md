@@ -2,6 +2,10 @@
 
 This release closes the first-run company-policy and exchange-rate gap in the local Finance workflow.
 
+## Windows portable build
+
+Windows x64 users can extract the portable ZIP and double-click `FinCompiler.exe`; Python, a terminal and administrator access are not required. A small control window starts the local-only server, opens the browser and stops the server when the user closes it. Persistent files are kept under `FinCompiler Data` beside the executable.
+
 ## Company setup in the UI
 
 Users no longer need to author JSON for a first evaluation. The upload page collects:
@@ -25,8 +29,9 @@ Downloading never equals approval. FinCompiler records the provider, source URL,
 
 ## Validation
 
-- 35 automated tests pass.
+- 36 automated tests pass.
 - The live UI cached 1,885 ECB 90-day observations and displayed the approval gate.
 - v0.5 CSV/XLSX upload, readable Management Pack, Finance sign-off and Windows launcher acceptance remain passing.
+- The packaged EXE and its double-click launcher both returned HTTP 200. The packaged sample completed 5/5 controls with `READY`, zero blocking items and zero Sales/GL difference.
 
-This remains a private alpha for synthetic or anonymized pilot data. Reference-rate suitability is a company accounting-policy decision, not a FinCompiler recommendation.
+This remains a private alpha for synthetic or anonymized pilot data. Reference-rate suitability is a company accounting-policy decision, not a FinCompiler recommendation. The Windows executable is not code-signed yet, so Windows SmartScreen may warn on first launch.

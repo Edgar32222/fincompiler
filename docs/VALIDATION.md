@@ -37,13 +37,18 @@
 33. UI-generated company policy requires at least one revenue account and a non-negative reconciliation tolerance.
 34. A 90-day ECB timeout falls back to the daily feed while retaining and displaying the original failure reason.
 35. A cached ECB reference book cannot enter an uploaded-file run until the company-policy approval checkbox is selected.
+36. Packaged resource and writable data roots remain separate when the portable runtime supplies explicit locations.
 
-## v0.5 local-product acceptance
+## Windows portable-product acceptance
 
 - `Start FinCompiler.cmd` launched the local app on a clean alternate port and returned HTTP 200.
 - `Stop FinCompiler.cmd` stopped only the recorded FinCompiler Python process.
 - The redesigned sample workflow was browser-checked from first screen to `READY`, including the five result tabs and both report downloads.
-- The full automated suite passes: 35 tests.
+- `FinCompiler.exe --server` started without using the system Python command and returned HTTP 200.
+- The actual double-click `FinCompiler.exe` launcher detected an occupied port, selected port 8512 and returned HTTP 200.
+- The packaged sample workflow completed 5/5 controls with `READY`, zero blocking items and zero Sales/GL difference.
+- Closing the packaged test processes released the selected local port.
+- The full automated suite passes: 36 tests.
 - A live UI fetch cached 1,885 ECB 90-day reference observations and displayed the explicit approval gate.
 
 ## Boundaries

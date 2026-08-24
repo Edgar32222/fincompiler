@@ -3,7 +3,7 @@ import json
 import pytest
 
 from fincompiler.config import FinanceConfig
-from fincompiler.web_app import _exception_action, _refresh_ecb_with_fallback, _stage_uploads, _write_company_config
+from fincompiler.web_app import _data_root, _exception_action, _refresh_ecb_with_fallback, _resource_root, _stage_uploads, _write_company_config
 
 
 class FakeUpload:
@@ -64,3 +64,12 @@ def test_ecb_refresh_falls_back_to_daily_without_hiding_reason(tmp_path):
     assert calls == ["90d", "daily"]
     assert result["history"] == "daily"
     assert "timeout" in result["fallback_reason"]
+
+
+def test_packaged_path_overrides_keep_resources_and_user_data_separate(tmp_path, monkeypatch):
+    resources = tmp_path / "program"
+    user_data = tmp_path / "user-data"
+    monkeypatch.setenv("FINCOMPILER_RESOURCE_DIR", str(resources))
+    monkeypatch.setenv("FINCOMPILER_DATA_DIR", str(user_data))
+    assert _resource_root() == resources.resolve()
+    assert _data_root() == user_data.resolve()

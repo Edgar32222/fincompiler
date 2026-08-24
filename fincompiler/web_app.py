@@ -2,12 +2,21 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
 from decimal import Decimal
 from pathlib import Path
 
 
 DATASET_LABELS = {"sales": "Sales detail", "gl": "General ledger", "budget": "Budget"}
+
+
+def _resource_root() -> Path:
+    return Path(os.environ.get("FINCOMPILER_RESOURCE_DIR", ".")).resolve()
+
+
+def _data_root() -> Path:
+    return Path(os.environ.get("FINCOMPILER_DATA_DIR", ".")).resolve()
 
 
 def _upload_target(logical_name: str, upload: object) -> str:
@@ -31,7 +40,7 @@ def _stage_uploads(files: dict[str, object]) -> Path:
         for name in sorted(payloads)
     )
     digest = hashlib.sha256(identity).hexdigest()[:16]
-    workspace = Path(".fincompiler") / "uploads" / digest
+    workspace = _data_root() / ".fincompiler" / "uploads" / digest
     workspace.mkdir(parents=True, exist_ok=True)
     for name, payload in payloads.items():
         (workspace / _upload_target(name, present[name])).write_bytes(payload)
@@ -112,6 +121,9 @@ def render() -> None:
     st.title("FinCompiler")
     st.caption(f"Month-end reconciliation and performance investigation · v{__version__}")
     st.info("Local-first: your files, mapping decisions, exchange-rate evidence and outputs stay on this computer.")
+    resource_root = _resource_root()
+    data_root = _data_root()
+    sample_input = resource_root / "demo" / "multicurrency_close"
 
     if "report" not in st.session_state:
         st.markdown("### 1 · Choose this month's files")
@@ -164,7 +176,7 @@ def render() -> None:
                         if st.button("Fetch latest 90-day ECB reference cache"):
                             try:
                                 st.session_state.ecb_reference = _refresh_ecb_with_fallback(
-                                    Path(".fincompiler") / "rates" / "ecb-reference.csv", refresh_ecb_rate_book
+                                    data_root / ".fincompiler" / "rates" / "ecb-reference.csv", refresh_ecb_rate_book
                                 )
                             except Exception as exc:
                                 st.error(str(exc))
@@ -190,16 +202,16 @@ def render() -> None:
         elif source_mode == "Use a prepared local folder":
             input_dir = st.text_input(
                 "Folder containing Sales, GL and Budget",
-                "demo/multicurrency_close",
+                str(sample_input),
                 help="Use sales.csv/xlsx, gl.csv/xlsx and budget.csv/xlsx. FinCompiler blocks duplicates instead of guessing.",
             )
         else:
-            input_dir = "demo/multicurrency_close"
+            input_dir = str(sample_input)
             st.caption("The sample contains multi-currency Sales, Dynamics-style GL, Budget and approved rate evidence.")
 
         with st.expander("Advanced local storage options"):
-            memory_file = st.text_input("Saved mapping memory", "mappings/memory.json")
-            output_folder = st.text_input("Local run folder", "output/demo-run")
+            memory_file = st.text_input("Saved mapping memory", str(data_root / "mappings" / "memory.json"))
+            output_folder = st.text_input("Local run folder", str(data_root / "output" / "demo-run"))
         run_clicked = st.button("Run month-end check", type="primary", width="stretch")
 
     if run_clicked:

@@ -29,6 +29,9 @@
 - [x] Explicit block/upload/ECB foreign-currency basis selection.
 - [x] ECB cache fetch with source evidence and no calculation-time network call.
 - [x] Company approval gate before reference rates can be used.
+- [x] Self-contained Windows x64 portable folder with no end-user Python dependency.
+- [x] Double-click control window, automatic browser open and local-server stop control.
+- [x] Packaged resource/data-root separation and end-to-end sample acceptance.
 
 ## Alpha limitations disclosed
 
@@ -39,3 +42,4 @@
 - [x] No authentication or multi-user workflow.
 - [x] No real-enterprise compatibility claim before anonymized pilots.
 - [x] Recommended evaluation ceiling documented from the current benchmark.
+- [x] Unsigned-executable SmartScreen risk disclosed before public distribution.
