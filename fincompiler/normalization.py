@@ -3,10 +3,11 @@ from __future__ import annotations
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
-from .models import CanonicalRecord, ExceptionItem, money
+from .models import CanonicalRecord, ExceptionItem, decimal_value, money
 
 
-NUMERIC_FIELDS = {"quantity", "unit_price", "net_sales", "gross_amount", "discount_amount", "tax_amount", "tax_rate", "exchange_rate", "unit_cost_local", "amount", "debit_amount", "credit_amount", "accounting_currency_amount", "reporting_currency_amount", "revenue"}
+MONEY_FIELDS = {"unit_price", "net_sales", "gross_amount", "discount_amount", "tax_amount", "unit_cost_local", "amount", "debit_amount", "credit_amount", "accounting_currency_amount", "reporting_currency_amount", "revenue"}
+DECIMAL_FIELDS = {"quantity", "tax_rate", "exchange_rate"}
 DATE_FIELDS = {"date", "due_date", "period"}
 
 
@@ -29,8 +30,10 @@ def normalize_records(records: list[CanonicalRecord]) -> tuple[list[CanonicalRec
             if value in {None, ""}:
                 continue
             try:
-                if field in NUMERIC_FIELDS:
+                if field in MONEY_FIELDS:
                     record.values[field] = money(value)
+                elif field in DECIMAL_FIELDS:
+                    record.values[field] = decimal_value(value)
                 elif field in DATE_FIELDS:
                     record.values[field] = _date(str(value))
                 elif field == "currency":
@@ -49,4 +52,3 @@ def normalize_records(records: list[CanonicalRecord]) -> tuple[list[CanonicalRec
             record.values["net_sales"] = (money(record.values["quantity"]) * money(record.values["unit_price"]) - discount).quantize(Decimal("0.01"))
             record.derivations["net_sales"] = {"formula": "quantity * unit_price - discount_amount", "sources": [record.lineage[name] for name in ("quantity", "unit_price", "discount_amount") if name in record.lineage]}
     return records, exceptions
-

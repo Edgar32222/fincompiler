@@ -1,0 +1,98 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "FinCompiler Should Sell a Faster, Safer Month-End",
+    "description": "A user-problem-led product direction for FinCompiler.",
+    "generatedAt": "2026-08-24T03:00:00Z",
+    "blocks": [
+      {"id": "title", "type": "markdown", "layout": "full", "body": "# FinCompiler Should Sell a Faster, Safer Month-End"},
+      {"id": "summary", "type": "markdown", "layout": "full", "body": "## Executive Summary\n\n- **The product promise should be a controlled month-end, not an AI dashboard.** A Finance Manager should be able to load monthly exports, see what is unsafe, understand why systems disagree, explain performance, and publish an evidence-backed pack.\n- **Trust is the differentiator.** FinCompiler should refuse unknown mappings and missing rate policies, retain every source and calculation step, and never create silent balancing adjustments.\n- **The first user-grade slice is now multi-currency close readiness.** The product can establish a common currency basis from an approved local rate book, retain applied-rate evidence, reconcile Sales to GL, and translate controls into next actions.\n- **The next release decision depends on pilot outcomes, not feature count.** The product should not claim general availability until real Finance users complete repeated monthly cycles with measurable time savings and zero silent corrections."},
+      {"id": "jobs_intro", "type": "markdown", "layout": "full", "body": "## Five user questions should define the product\n\nEach major screen and engine capability should answer one question a Finance Manager already asks during close. Features that do not shorten one of these tasks, reduce its risk, or improve its evidence should not be release priorities.\n\n1. **Can I trust the files and mappings?** Prevent incorrect fields and duplicates from silently changing totals.\n2. **Are all amounts comparable?** Establish an explicit, dated and evidenced common currency basis.\n3. **Why do Sales and GL differ?** Assign variance to specific records and controlled reasons.\n4. **What drove performance versus budget?** Produce a deterministic bridge that agrees with Finance totals.\n5. **Can I publish this pack?** Require resolved controls, traceable sources and immutable Finance sign-off."},
+      {"id": "delivered", "type": "markdown", "layout": "full", "body": "## Multi-currency close is the first complete user-value chain\n\nThe new flow validates supported currency codes, keeps exchange-rate precision, matches direct, inverse and cross rates by date and policy, and records the selected observations and formula. An ERP-provided accounting-currency amount is treated as posted accounting evidence when policy allows it. Missing rates become explicit Finance actions; external reference rates are refreshed only on request and cached locally.\n\nThis matters because the user no longer receives a generic ‘currencies differ’ error. They receive a comparable Sales/GL result, the exact records and rates used, and a clear instruction when evidence is missing."},
+      {"id": "priority_intro", "type": "markdown", "layout": "full", "body": "## The roadmap should follow unresolved close work\n\nThe next work is ordered by addressable user effort and trust risk. Reconciliation depth and exception operations come before richer narrative generation because users cannot rely on an explanation until the underlying population is controlled."},
+      {"id": "priority_chart", "type": "chart", "layout": "full", "chartId": "priority_order"},
+      {"id": "measurement", "type": "markdown", "layout": "full", "body": "## Release success must be measured in completed close work\n\nFeature completion is an engineering measure, not proof of user value. Pilot targets are hypotheses, not current claims:\n\n- **Time to first trusted result:** under 30 minutes after company setup.\n- **Repeat-month preparation time:** at least 50% lower than the user's baseline.\n- **Exception explanation coverage:** at least 95% of variance assigned to deterministic record-level causes before sign-off.\n- **Silent correction count:** exactly zero.\n- **Pack rebuild rate:** zero by the second monthly cycle."},
+      {"id": "next_steps", "type": "markdown", "layout": "full", "body": "## Recommended next steps\n\n1. Add credit-note allocation, split/merged posting and period-cut-off reasoning to the reconciliation investigator.\n2. Turn exceptions into a persistent workflow with owner, status, evidence, notes and maker-checker approval.\n3. Export a Finance-ready Excel Management Pack and exception workbook from the same deterministic results.\n4. Run three anonymized design-partner pilots for two consecutive monthly cycles.\n5. Use pilot task metrics and observed failure modes to decide the beta scope; defer broad connectors and generative commentary until the controlled workflow is proven."},
+      {"id": "questions", "type": "markdown", "layout": "full", "body": "## Further questions\n\n- Which initial segment feels the most pain: outsourced finance teams, multi-entity SMEs, or controllers in growing trading businesses?\n- Which two source-system pairs produce the highest repeated reconciliation burden?\n- Do users prefer FinCompiler to benchmark ERP-posted FX rates, supply approved rates, or support both under separate policies?\n- What evidence and export format is required before a Finance Manager will sign off without rebuilding the pack in Excel?"},
+      {"id": "caveats", "type": "markdown", "layout": "full", "body": "## Caveats and assumptions\n\nNo enterprise usage telemetry or real company data is available yet. Current evidence is implementation review, official accounting-system and central-bank documentation, deterministic synthetic scenarios, automated tests and local browser validation. Market fit, time savings, connector coverage and accounting-policy suitability remain provisional until anonymized pilots are completed."}
+    ],
+    "charts": [
+      {
+        "id": "priority_order",
+        "title": "Delivery priority by user problem",
+        "subtitle": "Product decision score, 5 = first priority; this is not usage telemetry",
+        "showDescription": true,
+        "type": "bar",
+        "dataset": "priority_chart",
+        "sourceId": "strategy_notes",
+        "intent": "comparison",
+        "question": "Which unresolved user problem should be implemented first?",
+        "rationale": "Five ordered categories are most directly compared with a bar chart.",
+        "encodings": {
+          "x": {"field": "problem", "type": "nominal", "label": "User problem"},
+          "y": {"field": "decision_score", "type": "quantitative", "label": "Decision priority", "format": "number"},
+          "tooltip": [
+            {"field": "problem", "type": "text", "label": "User problem"},
+            {"field": "decision_score", "type": "quantitative", "label": "Priority score", "format": "number"},
+            {"field": "next_capability", "type": "text", "label": "Next capability"}
+          ]
+        },
+        "valueFormat": "number",
+        "layout": "full",
+        "maxRows": 5,
+        "surface": {"showLegend": false}
+      }
+    ],
+    "sources": [
+      {"id": "repo", "label": "FinCompiler v0.4 implementation", "path": "fincompiler"},
+      {"id": "validation", "label": "Automated and scenario validation", "path": "tests"},
+      {"id": "strategy_notes", "label": "Product prioritization decision dataset", "path": "docs/product_strategy/priority_chart.sql", "query": {"engine": "SQLite", "language": "sql", "description": "Materializes the five reviewed product priorities and orders them by decision score.", "sql": "WITH priorities(problem, decision_score, next_capability) AS (SELECT 'Complex reconciliation', 5, 'Many-to-many matching and cut-off reasoning' UNION ALL SELECT 'Exception resolution', 4, 'Owner, status, evidence and maker-checker' UNION ALL SELECT 'Finance deliverables', 3, 'Excel pack and exception workbook' UNION ALL SELECT 'Guided setup', 2, 'Company and period onboarding' UNION ALL SELECT 'Pilot evidence', 1, 'Task telemetry and repeated close measurement') SELECT problem, decision_score, next_capability FROM priorities ORDER BY decision_score DESC;", "tables_used": ["priorities CTE"], "metric_definitions": ["decision_score is an ordinal product-priority score: 5 is first and 1 is fifth; it is not observed usage data"]}},
+      {"id": "ecb", "label": "ECB euro reference rates", "href": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"},
+      {"id": "dynamics", "label": "Microsoft Dynamics ledger currency configuration", "href": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/configure-ledger"}
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-24T03:00:00Z",
+    "status": "ready",
+    "datasets": {
+      "user_jobs": [
+        {"sequence": 1, "question": "Can I trust the files and mappings?", "product_outcome": "Only confirmed or deterministic fields enter calculations; drift and duplicates are visible.", "failure_prevented": "Wrong columns silently changing revenue, cost or period."},
+        {"sequence": 2, "question": "Are all amounts comparable?", "product_outcome": "Transaction, accounting and reporting currencies use explicit dated policies with evidence.", "failure_prevented": "Comparing or adding amounts on incompatible currency bases."},
+        {"sequence": 3, "question": "Why do Sales and GL differ?", "product_outcome": "Every variance is assigned to records and a controlled reason or remains visibly unresolved.", "failure_prevented": "Manual plugs and unexplained reconciliation balances."},
+        {"sequence": 4, "question": "What drove performance versus budget?", "product_outcome": "Price, volume and disclosed residual effects balance deterministically to the reported variance.", "failure_prevented": "Narratives that do not mathematically agree with Finance totals."},
+        {"sequence": 5, "question": "Can I publish this pack?", "product_outcome": "All blocking controls are resolved, sources are traceable and Finance sign-off freezes the run.", "failure_prevented": "Publishing a pack that cannot be reproduced or audited."}
+      ],
+      "priorities": [
+        {"priority": 1, "user_problem": "Credit notes, split postings and cut-off items still require manual explanation.", "next_capability": "Many-to-many reconciliation and deterministic reason rules.", "release_evidence": "Golden scenarios plus anonymized pilot cases."},
+        {"priority": 2, "user_problem": "Exceptions are detected but not managed through resolution.", "next_capability": "Persistent owner, status, notes, evidence and maker-checker workflow.", "release_evidence": "Two complete close cycles without side spreadsheets."},
+        {"priority": 3, "user_problem": "Finance users still need familiar deliverables.", "next_capability": "Excel Management Pack, exception workbook and source drill-down export.", "release_evidence": "Controller can sign off without rebuilding outputs."},
+        {"priority": 4, "user_problem": "Initial setup still depends on knowing source fields and policies.", "next_capability": "Guided company setup, period selection and reusable source profiles.", "release_evidence": "First trusted run completed without developer help."},
+        {"priority": 5, "user_problem": "The product lacks evidence of repeated real-world value.", "next_capability": "Privacy-preserving task telemetry and structured pilot measurement.", "release_evidence": "Three design partners, two monthly cycles each."}
+      ],
+      "priority_chart": [
+        {"problem": "Complex reconciliation", "decision_score": 5, "next_capability": "Many-to-many matching and cut-off reasoning"},
+        {"problem": "Exception resolution", "decision_score": 4, "next_capability": "Owner, status, evidence and maker-checker"},
+        {"problem": "Finance deliverables", "decision_score": 3, "next_capability": "Excel pack and exception workbook"},
+        {"problem": "Guided setup", "decision_score": 2, "next_capability": "Company and period onboarding"},
+        {"problem": "Pilot evidence", "decision_score": 1, "next_capability": "Task telemetry and repeated close measurement"}
+      ],
+      "success_metrics": [
+        {"order": 1, "metric": "Time to first trusted result", "definition": "Elapsed time from selecting files to a run with every blocking issue explained.", "pilot_target": "Under 30 minutes after company setup"},
+        {"order": 2, "metric": "Repeat-month preparation time", "definition": "Active Finance time required to load and validate the next period using saved mappings and policies.", "pilot_target": "At least 50% lower than the user's baseline"},
+        {"order": 3, "metric": "Exception explanation coverage", "definition": "Share of reconciliation variance assigned to a deterministic record-level cause.", "pilot_target": "At least 95% before sign-off"},
+        {"order": 4, "metric": "Silent correction count", "definition": "Mappings, rates or balancing adjustments applied without visible user-approved policy.", "pilot_target": "Exactly zero"},
+        {"order": 5, "metric": "Pack rebuild rate", "definition": "Share of pilot closes where the user must recreate the result in another workbook before approval.", "pilot_target": "Zero by the second monthly cycle"}
+      ]
+    }
+  },
+  "sources": [
+    {"id": "repo", "label": "FinCompiler v0.4 implementation", "path": "fincompiler"},
+    {"id": "validation", "label": "Automated and scenario validation", "path": "tests"},
+    {"id": "strategy_notes", "label": "Product prioritization decision dataset", "path": "docs/product_strategy/priority_chart.sql", "query": {"engine": "SQLite", "language": "sql", "description": "Materializes the five reviewed product priorities and orders them by decision score.", "sql": "WITH priorities(problem, decision_score, next_capability) AS (SELECT 'Complex reconciliation', 5, 'Many-to-many matching and cut-off reasoning' UNION ALL SELECT 'Exception resolution', 4, 'Owner, status, evidence and maker-checker' UNION ALL SELECT 'Finance deliverables', 3, 'Excel pack and exception workbook' UNION ALL SELECT 'Guided setup', 2, 'Company and period onboarding' UNION ALL SELECT 'Pilot evidence', 1, 'Task telemetry and repeated close measurement') SELECT problem, decision_score, next_capability FROM priorities ORDER BY decision_score DESC;", "tables_used": ["priorities CTE"], "metric_definitions": ["decision_score is an ordinal product-priority score: 5 is first and 1 is fifth; it is not observed usage data"]}},
+    {"id": "ecb", "label": "ECB euro reference rates", "href": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"},
+    {"id": "dynamics", "label": "Microsoft Dynamics ledger currency configuration", "href": "https://learn.microsoft.com/en-us/dynamics365/finance/general-ledger/configure-ledger"}
+  ]
+}

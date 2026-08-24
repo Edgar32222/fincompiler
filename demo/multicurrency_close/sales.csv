@@ -1,0 +1,3 @@
+InvoiceNumber,Date,DueDate,ContactName,ItemCode,Description,Quantity,UnitAmount,DiscountAmount,LineAmount,TaxAmount,CurrencyCode,CurrencyRate,Status,AccountCode
+FX-1001,2026-07-15,2026-08-14,Orion Retail,KETTLE-A,Kettle export order,1,100.00,0.00,100.00,5.00,USD,3.670000,AUTHORISED,4000
+FX-1002,2026-07-16,2026-08-15,Luna Stores,OVEN-B,Oven export order,1,800.00,0.00,800.00,40.00,CNY,0.500000,AUTHORISED,4000

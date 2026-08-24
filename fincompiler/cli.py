@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 
 from .mapping import MappingMemory
+from .fx import refresh_ecb_rate_book
 from .lineage_store import LineageStore
 from .pipeline import compile_pack
 from .scenario import SUPPORTED_ANOMALIES, generate_scenario
@@ -40,6 +42,9 @@ def main(argv=None) -> int:
     confirm.add_argument("canonical_field")
     confirm.add_argument("--fields", nargs="+", required=True)
     confirm.add_argument("--memory", default="mappings/memory.json")
+    rates = sub.add_parser("refresh-ecb-rates")
+    rates.add_argument("output_file")
+    rates.add_argument("--history", choices=["daily", "90d", "full"], default="90d")
     args = parser.parse_args(argv)
     if args.command == "run":
         result = compile_pack(args.input_dir, args.output, args.memory, args.config)
@@ -56,6 +61,12 @@ def main(argv=None) -> int:
         result = verify_run(args.run_dir)
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result["valid"] else 2
+    elif args.command == "refresh-ecb-rates":
+        try:
+            print(json.dumps(refresh_ecb_rate_book(args.output_file, args.history), indent=2, ensure_ascii=False))
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
     else:
         memory = MappingMemory(args.memory)
         memory.confirm(args.dataset, args.source_field, args.canonical_field, args.fields)

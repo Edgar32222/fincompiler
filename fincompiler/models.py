@@ -20,6 +20,20 @@ def money(value: Any) -> Decimal:
     return -result if negative else result
 
 
+def decimal_value(value: Any) -> Decimal:
+    """Parse a non-money decimal without destroying rate or quantity precision."""
+    if value is None or str(value).strip() == "":
+        return Decimal("0")
+    raw = str(value).strip().replace(",", "").replace(" ", "")
+    negative = raw.startswith("(") and raw.endswith(")")
+    if negative:
+        raw = raw[1:-1]
+    if raw.endswith("-"):
+        raw = "-" + raw[:-1]
+    result = Decimal(raw)
+    return -result if negative else result
+
+
 @dataclass(frozen=True)
 class SourceRef:
     file: str

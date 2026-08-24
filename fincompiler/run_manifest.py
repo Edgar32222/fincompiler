@@ -16,14 +16,16 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
-def build_manifest(input_dir: str | Path, config: dict, config_path: str | Path | None = None) -> dict:
+def build_manifest(input_dir: str | Path, config: dict, config_path: str | Path | None = None, evidence_files: list[tuple[str, str | Path]] | None = None) -> dict:
     input_dir = Path(input_dir)
     sources = []
     for dataset in ("sales", "gl", "budget"):
         path = input_dir / f"{dataset}.csv"
         sources.append({"dataset": dataset, "file": str(path.resolve()), "sha256": sha256_file(path), "bytes": path.stat().st_size})
+    for dataset, raw_path in evidence_files or []:
+        path = Path(raw_path)
+        sources.append({"dataset": dataset, "file": str(path.resolve()), "sha256": sha256_file(path), "bytes": path.stat().st_size})
     config_hash = hashlib.sha256(json.dumps(config, sort_keys=True).encode()).hexdigest()
     identity = json.dumps({"engine_version": __version__, "sources": [(item["dataset"], item["sha256"]) for item in sources], "config_sha256": config_hash}, sort_keys=True)
     run_id = hashlib.sha256(identity.encode()).hexdigest()[:16]
     return {"run_id": run_id, "created_at_utc": datetime.now(timezone.utc).isoformat(), "engine_version": __version__, "sources": sources, "config_file": str(Path(config_path).resolve()) if config_path else None, "config_sha256": config_hash}
-

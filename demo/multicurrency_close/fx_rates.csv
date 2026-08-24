@@ -1,0 +1,4 @@
+effective_date,base_currency,quote_currency,rate,rate_type,provider,source_url,fetched_at,raw_sha256
+2026-07-15,USD,AED,3.670000,transaction,Approved Treasury Sheet,approved://treasury/july-2026,2026-07-15T08:00:00Z,
+2026-07-15,EUR,CNY,8.000000,transaction,Approved Treasury Sheet,approved://treasury/july-2026,2026-07-15T08:00:00Z,
+2026-07-15,EUR,AED,4.000000,transaction,Approved Treasury Sheet,approved://treasury/july-2026,2026-07-15T08:00:00Z,

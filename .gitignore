@@ -12,3 +12,4 @@ output-*/
 mappings/memory.json
 mappings/*-memory.json
 demo/generated-*/
+.fincompiler/

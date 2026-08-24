@@ -9,6 +9,8 @@ from .models import CanonicalRecord, ExceptionItem
 def duplicate_source_exceptions(manifest: dict) -> list[ExceptionItem]:
     by_hash = defaultdict(list)
     for source in manifest["sources"]:
+        if source["dataset"] not in {"sales", "gl", "budget"}:
+            continue
         by_hash[source["sha256"]].append(source["dataset"])
     return [ExceptionItem("DUPLICATE_SOURCE_FILE", "BLOCKING", "The same file content was supplied for multiple datasets", {"datasets": datasets, "sha256": digest}) for digest, datasets in by_hash.items() if len(datasets) > 1]
 

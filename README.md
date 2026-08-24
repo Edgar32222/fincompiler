@@ -1,8 +1,8 @@
-# FinCompiler v0.3.0-alpha.1
+# FinCompiler v0.4.0-alpha.1
 
 > **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
 
-FinCompiler turns messy monthly finance files into traceable, deterministic management analysis. It is local-first: source data, mapping memory and outputs stay on the machine.
+FinCompiler helps a Finance Manager answer five month-end questions: can I trust the files, are amounts comparable, why do Sales and GL differ, what drove performance, and can I publish the pack? It is local-first: source data, mapping memory, approved rates and outputs stay on the machine.
 
 ## Trust rules
 
@@ -14,6 +14,8 @@ FinCompiler turns messy monthly finance files into traceable, deterministic mana
 - Sales-to-GL reconciliation identifies invoice-level missing, unmatched and amount-mismatch causes.
 - Budget-vs-Actual PVM uses Python `Decimal`. An LLM may explain the resulting JSON, but never calculates or adjusts amounts.
 - A blocking reconciliation or unresolved mapping prevents output readiness.
+- Foreign-currency records use an explicit dated rate policy. Direct, inverse and cross-rate formulas retain provider, effective date, source and raw-response hash evidence.
+- ERP accounting-currency amounts can be used as posted accounting evidence when company policy explicitly allows it.
 
 ## Quick start (Windows)
 
@@ -29,6 +31,18 @@ py -m venv .venv
 
 The demo deliberately contains an AED 2,706 difference on `INV-1003`, plus an unmapped Chinese OPEX field in `opex_dirty.csv` for review scenarios.
 
+`demo/multicurrency_close` demonstrates a completed user workflow: USD direct conversion, CNY-to-AED conversion through EUR, previous-effective-date fallback, use of posted accounting-currency GL amounts, zero Sales/GL variance and stored rate evidence.
+
+Refresh an ECB reference-rate cache explicitly when company policy permits it:
+
+```powershell
+fincompiler refresh-ecb-rates .fincompiler\rates\ecb-reference.csv --history 90d
+```
+
+ECB rates are informational reference rates. Downloading them never silently changes an existing run or makes them an approved accounting policy.
+
+See [Currency and exchange-rate policy](docs/FX_POLICY.md) for quote conventions, matching order, evidence fields and blocking behavior.
+
 `demo/realistic_multisystem` adds Xero-style multi-line invoices and a Dynamics-style general journal with separate debit/credit and reporting-currency fields. Its values are synthetic; the field shapes are documented in [docs/FIELD_EVIDENCE.md](docs/FIELD_EVIDENCE.md).
 
 ## Mapping confirmation
@@ -43,7 +57,7 @@ Re-running the same schema uses persistent memory. New, removed or renamed colum
 
 ## Outputs
 
-`management_pack.json` contains mapping proposals, exceptions, output readiness, source-backed reconciliation and the balanced PVM bridge. No data leaves the machine.
+`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation and the balanced PVM bridge. No source data leaves the machine.
 
 Full lineage is stored in an indexed `lineage-<run_id>.sqlite` file. Management Pack totals contain a stable lineage ID, input count and small preview. Retrieve a page without loading the entire history:
 
@@ -69,5 +83,7 @@ A signed run cannot be overwritten. Any later artifact change causes verificatio
 The recorded baseline covers 9,994 Sales lines plus 5,002 GL lines. Use the alpha for evaluation packs up to roughly 25,000 combined source rows; larger runs may work but are not yet a release claim. See [docs/DATA_STRATEGY.md](docs/DATA_STRATEGY.md).
 
 For evidence behind vendor-specific fields, see [docs/FIELD_EVIDENCE.md](docs/FIELD_EVIDENCE.md). For structured finance-user validation, see [docs/PILOT_GUIDE.md](docs/PILOT_GUIDE.md).
+
+The product direction and pilot success measures are maintained in the portable [user-problem strategy report](docs/product_strategy/report.html).
 
 When real enterprise exports are not available, use the seeded scenario generator and truth manifest described in [docs/DATA_STRATEGY.md](docs/DATA_STRATEGY.md). Company-specific revenue accounts, base currency and reconciliation tolerance belong in `company_config.json`; see [demo/company_config.example.json](demo/company_config.example.json).
