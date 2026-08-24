@@ -9,7 +9,7 @@ This document records public product-channel setup only. Login and recovery emai
 | Channel | Public handle | Verified public state | Readiness |
 | --- | --- | --- | --- |
 | X | `@Edgar37455925` | Account exists. Public display name was `WW.`, with no bio and no visible posts during the 2026-08-24 read-only review. | Not ready: rebrand before outreach. |
-| Reddit | `u/HeadMolasses226` | Public inspection was blocked by Reddit's human-verification challenge. | Not verified: founder must complete the challenge and review history. |
+| Reddit | `u/FinCompiler` | Signed-in inspection confirmed a clean product-named account with no visible posts, comments, bio or social links. Search discoverability and following are enabled. | Ready for profile copy after approval; partner-based ad personalization should be disabled for privacy. |
 
 ## Recommended public identity
 
@@ -39,16 +39,16 @@ Do not publish a login or recovery email in either profile.
 
 ## Reddit setup checklist
 
-1. Founder completes the human-verification challenge; automation must not bypass it.
-2. Sign in and confirm the username is `u/HeadMolasses226`.
-3. Review all visible posts, comments, communities, trophies and profile text for employer, location, personal-interest or identity clues.
-4. Set the display name to `FinCompiler` if Reddit permits it without changing the username.
-5. Use a product-only avatar and the approved short bio.
-6. Disable online-status display and personalization/discoverability settings where appropriate.
+1. Human verification was completed by the founder; automation did not bypass it.
+2. The signed-in username was confirmed as `u/FinCompiler` on 2026-08-24.
+3. The public profile contained no visible posts, comments, bio, social links or personal identity clues at review time.
+4. Keep search-engine discoverability and following enabled so Finance users can find and contact the product account.
+5. Add the approved short bio and a product-only avatar after explicit approval.
+6. Disable partner-based advertising personalization; it is unnecessary for product discovery and creates avoidable cross-site profiling.
 7. Do not join employer, local-neighborhood or colleague-adjacent communities from this account.
 8. Read each target community's self-promotion, research and direct-message rules before participating.
 9. Build a small history of useful, non-promotional Finance answers before publishing a design-partner request where community rules expect established participation.
-10. Never delete or rewrite history merely to conceal misconduct; if existing history creates an identity or trust risk, use a fresh product-only account instead.
+10. Never delete or rewrite history merely to conceal misconduct; if future activity creates an identity or trust risk, stop using the account for outreach and review the exposure.
 
 ## Launch sequence
 
