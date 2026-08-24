@@ -86,4 +86,6 @@ For evidence behind vendor-specific fields, see [docs/FIELD_EVIDENCE.md](docs/FI
 
 The product direction and pilot success measures are maintained in the portable [user-problem strategy report](docs/product_strategy/report.html).
 
+Market validation is now managed as a measured product workflow. See the [design-partner playbook](docs/market_validation/PLAYBOOK.md), [prepared outreach drafts](docs/market_validation/OUTREACH_DRAFTS.md), [private-pilot data terms](docs/market_validation/PILOT_DATA_TERMS.md), and the portable [market wedge report](docs/market_validation/report.html). No outreach draft is authorization to post or message; every external action requires founder approval immediately before sending.
+
 When real enterprise exports are not available, use the seeded scenario generator and truth manifest described in [docs/DATA_STRATEGY.md](docs/DATA_STRATEGY.md). Company-specific revenue accounts, base currency and reconciliation tolerance belong in `company_config.json`; see [demo/company_config.example.json](demo/company_config.example.json).

@@ -1,0 +1,316 @@
+{
+  "surface": "report",
+  "manifest": {
+    "version": 1,
+    "surface": "report",
+    "title": "FinCompiler's First Market Wedge",
+    "description": "A privacy-safe plan to recruit design partners, validate the problem and turn real close work into product evidence.",
+    "generatedAt": "2026-08-24T08:00:00Z",
+    "blocks": [
+      {
+        "id": "title",
+        "type": "markdown",
+        "layout": "full",
+        "body": "# FinCompiler's First Market Wedge"
+      },
+      {
+        "id": "summary",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## Executive Summary\n\n- **Start with Finance Managers and Controllers who reconcile several monthly exports, not with a broad SME bookkeeping market.** The strongest product fit is a trading, distribution, light-manufacturing or multi-entity business that cannot replace its current systems and still needs a controlled management pack.\n- **Sell a local reconciliation investigation, not an AI dashboard.** The differentiated promise is to stop on unsafe mappings, retain currency and source evidence, identify the records behind a difference, and never create a silent plug.\n- **Use e-commerce payout pain as a secondary test, not the first connector roadmap.** The problem is visible and accessible, but specialized tools already serve standard Shopify, Amazon, Xero and QuickBooks flows. FinCompiler should enter only where multiple systems, currencies or non-standard exceptions remain.\n- **The next release gate is behavioral evidence.** Ten qualified problem interviews, three locally activated pilots and at least two second-cycle returns would justify further product investment; public interest alone would not."
+      },
+      {
+        "id": "signals_intro",
+        "type": "markdown",
+        "layout": "full",
+        "sourceId": "signal_scan",
+        "body": "## Reconciliation investigation is the repeated problem\n\nThe bounded scan coded 13 public discussions from 2025 through August 2026. Eleven described reconciliation or exception-investigation pain. Spreadsheet fragility, multiple systems or schema drift, and cost or implementation friction each appeared in five discussions. Themes overlap, so the counts show repeated interview directions rather than market prevalence.\n\nThe strongest implication is narrow: users do not merely need a file importer. They need to prove a balance, preserve the context behind a changed export, and explain the residual difference to a reviewer."
+      },
+      {
+        "id": "signal_chart",
+        "type": "chart",
+        "layout": "full",
+        "chartId": "pain_theme_counts"
+      },
+      {
+        "id": "wedge",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## The first pilot should sit between existing systems\n\nThe primary design partner is a hands-on Finance Manager, Controller or Head of Finance in a 10-200 employee business. The workflow should repeat monthly, use at least three exports, span at least two systems, entities, currencies or channels, and end in a result the candidate personally prepares or reviews.\n\nThis segment matches what FinCompiler can already demonstrate: explicit mapping review and memory, schema-drift detection, source lineage, deterministic grouped Sales/GL investigation, evidence-backed FX policy, a balanced PVM bridge and immutable sign-off. It also avoids promising an ERP replacement or a general bookkeeping service.\n\nFractional CFOs and small accounting advisers are a partner lane because one trusted adviser can expose several recurring data shapes. Multi-country payroll is deferred: the pain is strong, but employee data, jurisdiction semantics and enterprise integration would expand the security and product boundary too early."
+      },
+      {
+        "id": "ecommerce",
+        "type": "markdown",
+        "layout": "full",
+        "sourceId": "signal_scan",
+        "body": "## E-commerce is a useful falsification lane, not a default build\n\nFour public discussions centered on marketplace payout components, fees, refunds, chargebacks or cutoff. They make e-commerce candidates easy to find and interview. They also repeatedly mention specialized connectors that summarize payouts into Xero or QuickBooks.\n\nFinCompiler should test a harder boundary: whether users still need a local investigator after the standard connector runs, especially across multiple channels, currencies, payment gateways, inventory files and management-reporting views. If three verified workflows reduce to a standard connector problem, this lane should be rejected rather than copied."
+      },
+      {
+        "id": "sprint",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## A 14-day sprint should buy learning, not impressions\n\n1. Create product-only Reddit and X identities plus a privacy-safe contact route; LinkedIn remains excluded.\n2. Publish a minimal landing page and a 90-second synthetic walkthrough that show the local-first trust boundary and alpha limitations.\n3. After founder approval, run one evidence-led Reddit post, one X thread and no more than five individually relevant invitations.\n4. Complete five problem interviews that reconstruct the last real close and its last real exception.\n5. Obtain two anonymized sample structures with trusted totals and activate one local pilot.\n6. Agree the second-cycle date before counting the pilot as activated.\n\nEvery post, reply and direct message requires approval immediately before it is sent. Public handles are discovery signals only; no employer, email, phone number, authority or budget should be inferred."
+      },
+      {
+        "id": "measurement",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## The evidence gate is ten conversations and repeated close work\n\nThe 30-day market-validation target is ten qualified problem interviews, three activated pilots, two completed first cycles and at least two second-cycle returns. A repeated pain pattern should appear in at least four qualified interviews before it drives the roadmap.\n\nA pilot succeeds only when the second cycle takes at least 50% less active preparation time, at least 95% of the variance is attributed to deterministic record-level causes, no silent correction occurs, and the reviewer does not rebuild the output elsewhere. Reply rate, followers, page views and compliments are diagnostic metrics, not proof of value."
+      },
+      {
+        "id": "next_steps",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## Founder actions required before recruiting\n\n1. Confirm product-only Reddit and X handles that are not connected to an employer or personal professional identity.\n2. Choose a privacy-safe product contact route for applicants.\n3. Approve the exact first batch: one Reddit post, one X thread and up to five targeted invitations.\n4. Reserve time for five 30-minute discovery interviews, or choose a pseudonymous text-only format.\n5. Decide whether two-cycle pilots are free or use a refundable commitment deposit. Even a free pilot must require anonymized evidence, reviewer time and a scheduled second cycle."
+      },
+      {
+        "id": "questions",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## Further questions\n\n- Which repeated reconciliation is painful enough that a Finance reviewer will provide anonymized rows and return for a second month?\n- Is the strongest entry point Sales-to-GL, balance-sheet account proof, inventory, marketplace settlement or multi-entity consolidation?\n- Will users accept a local Python application, or is a signed desktop installer required before a pilot?\n- Which Excel deliverable must remain unchanged for management or auditor acceptance?\n- Does willingness to pay belong to the operating company, the Controller's budget or an accounting adviser serving several clients?"
+      },
+      {
+        "id": "caveats",
+        "type": "markdown",
+        "layout": "full",
+        "body": "## Caveats and assumptions\n\nNo verified customer interviews, product-usage telemetry, willingness-to-pay evidence or real enterprise data exists yet. Public discussions may contain incomplete, promotional or unverifiable claims, and the bounded sample is not representative of the accounting-software market. The proposed segment, conversion targets and pilot thresholds are falsifiable operating hypotheses. They should change when direct workflow evidence contradicts them. Public X search was too noisy to support the coded counts, and no LinkedIn research or outreach was used."
+      }
+    ],
+    "charts": [
+      {
+        "id": "pain_theme_counts",
+        "title": "Pain themes in the bounded public scan",
+        "subtitle": "13 Reddit discussions reviewed; overlapping tags, not market prevalence",
+        "showDescription": true,
+        "type": "bar",
+        "dataset": "pain_theme_counts",
+        "sourceId": "signal_scan",
+        "intent": "comparison",
+        "question": "Which repeated problems should shape FinCompiler discovery interviews?",
+        "rationale": "Six comparable theme counts with long labels are most readable as a horizontal bar comparison.",
+        "encodings": {
+          "x": {
+            "field": "pain_theme",
+            "type": "nominal",
+            "label": "Pain theme"
+          },
+          "y": {
+            "field": "signal_count",
+            "type": "quantitative",
+            "label": "Public discussions",
+            "format": "number"
+          },
+          "tooltip": [
+            {
+              "field": "pain_theme",
+              "type": "text",
+              "label": "Pain theme"
+            },
+            {
+              "field": "signal_count",
+              "type": "quantitative",
+              "label": "Discussions",
+              "format": "number"
+            },
+            {
+              "field": "discovery_implication",
+              "type": "text",
+              "label": "Discovery implication"
+            }
+          ]
+        },
+        "valueFormat": "number",
+        "layout": "full",
+        "maxRows": 6,
+        "surface": {
+          "showLegend": false
+        }
+      }
+    ],
+    "sources": [
+      {
+        "id": "signal_scan",
+        "label": "Coded public-discussion inventory",
+        "path": "docs/market_validation/source_notes.md",
+        "query": {
+          "engine": "SQLite",
+          "language": "sql",
+          "description": "Materializes the manually reviewed, overlapping pain-theme counts from the 13-source public-discussion inventory.",
+          "sql": "WITH pain_theme_counts(pain_theme, signal_count, sample_size, discovery_implication) AS (SELECT 'Reconciliation / exception investigation', 11, 13, 'Lead with the last unexplained difference and required review evidence.' UNION ALL SELECT 'Spreadsheet or report fragility', 5, 13, 'Test schema drift, mapping memory and unchanged management-pack formats.' UNION ALL SELECT 'Multiple systems or schema drift', 5, 13, 'Qualify candidates with two or more recurring source systems.' UNION ALL SELECT 'Cost or implementation friction', 5, 13, 'Position a bounded local pilot, not a replacement implementation.' UNION ALL SELECT 'Payout components, fees, refunds or cutoff', 4, 13, 'Test residual multi-channel exceptions after standard connectors.' UNION ALL SELECT 'Multi-currency or cross-border complexity', 4, 13, 'Validate approved rate policy and transaction/base/reporting currency authority.') SELECT pain_theme, signal_count, sample_size, discovery_implication FROM pain_theme_counts ORDER BY signal_count DESC, pain_theme;",
+          "tables_used": [
+            "pain_theme_counts CTE derived from docs/market_validation/source_notes.md"
+          ],
+          "filters": [
+            "13 distinct public Reddit discussions reviewed on 2026-08-24",
+            "posts published from 2025 through August 2026",
+            "overlapping theme tags; counts are not mutually exclusive"
+          ],
+          "metric_definitions": [
+            "signal_count is the number of reviewed discussions manually tagged with the pain theme",
+            "sample_size is 13 distinct discussions; theme counts do not sum to sample_size because tags overlap"
+          ]
+        }
+      },
+      {
+        "id": "playbook",
+        "label": "FinCompiler market-validation playbook",
+        "path": "docs/market_validation/PLAYBOOK.md"
+      },
+      {
+        "id": "repo",
+        "label": "FinCompiler v0.4 implementation and validation",
+        "path": "fincompiler"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-24T08:00:00Z",
+    "status": "ready",
+    "datasets": {
+      "pain_theme_counts": [
+        {
+          "rank": 1,
+          "pain_theme": "Reconciliation / exception investigation",
+          "signal_count": 11,
+          "sample_size": 13,
+          "discovery_implication": "Lead with the last unexplained difference and required review evidence."
+        },
+        {
+          "rank": 2,
+          "pain_theme": "Spreadsheet or report fragility",
+          "signal_count": 5,
+          "sample_size": 13,
+          "discovery_implication": "Test schema drift, mapping memory and unchanged management-pack formats."
+        },
+        {
+          "rank": 3,
+          "pain_theme": "Multiple systems or schema drift",
+          "signal_count": 5,
+          "sample_size": 13,
+          "discovery_implication": "Qualify candidates with two or more recurring source systems."
+        },
+        {
+          "rank": 4,
+          "pain_theme": "Cost or implementation friction",
+          "signal_count": 5,
+          "sample_size": 13,
+          "discovery_implication": "Position a bounded local pilot, not a replacement implementation."
+        },
+        {
+          "rank": 5,
+          "pain_theme": "Payout components, fees, refunds or cutoff",
+          "signal_count": 4,
+          "sample_size": 13,
+          "discovery_implication": "Test residual multi-channel exceptions after standard connectors."
+        },
+        {
+          "rank": 6,
+          "pain_theme": "Multi-currency or cross-border complexity",
+          "signal_count": 4,
+          "sample_size": 13,
+          "discovery_implication": "Validate approved rate policy and transaction/base/reporting currency authority."
+        }
+      ],
+      "segment_hypotheses": [
+        {
+          "segment": "Trading, distribution and light-manufacturing Finance teams",
+          "priority": "Primary",
+          "qualification": "3+ exports; 2+ systems, entities, currencies or channels; owns monthly tie-out",
+          "falsification": "Fewer than 3 of the first 10 qualified interviews share a reproducible reconciliation"
+        },
+        {
+          "segment": "Fractional CFOs and small accounting advisers",
+          "priority": "Partner lane",
+          "qualification": "Repeated comparable workflow across 2+ clients with permission to anonymize",
+          "falsification": "Advisers require a hosted multi-client service before any local evaluation"
+        },
+        {
+          "segment": "Multi-channel e-commerce finance and bookkeeping",
+          "priority": "Secondary test",
+          "qualification": "Residual exception remains after payout connector or across non-standard channels",
+          "falsification": "Verified workflows are fully solved by a standard connector"
+        },
+        {
+          "segment": "Multi-country payroll Finance teams",
+          "priority": "Deferred",
+          "qualification": "Only reconsider after security and semantics expand beyond current alpha",
+          "falsification": "Current product cannot safely cover employee data and jurisdiction-specific mappings"
+        }
+      ],
+      "validation_targets": [
+        {
+          "window": "14 days",
+          "metric": "Qualified problem interviews",
+          "target": 5,
+          "definition": "Candidate owns or reviews a monthly multi-source reconciliation and reconstructs a recent real exception"
+        },
+        {
+          "window": "14 days",
+          "metric": "Anonymized sample commitments",
+          "target": 2,
+          "definition": "Candidate agrees to provide minimal anonymized structure plus trusted totals"
+        },
+        {
+          "window": "14 days",
+          "metric": "Locally activated pilots",
+          "target": 1,
+          "definition": "First trusted run completed and second-cycle date agreed"
+        },
+        {
+          "window": "30 days",
+          "metric": "Qualified problem interviews",
+          "target": 10,
+          "definition": "Same qualification definition as the 14-day target"
+        },
+        {
+          "window": "30 days",
+          "metric": "Activated pilots",
+          "target": 3,
+          "definition": "Local run, trusted totals, baseline time and second-cycle commitment recorded"
+        },
+        {
+          "window": "Two close cycles",
+          "metric": "Returning pilots",
+          "target": 2,
+          "definition": "At least two of three activated pilots complete a second monthly cycle"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "signal_scan",
+      "label": "Coded public-discussion inventory",
+      "path": "docs/market_validation/source_notes.md",
+      "query": {
+        "engine": "SQLite",
+        "language": "sql",
+        "description": "Materializes the manually reviewed, overlapping pain-theme counts from the 13-source public-discussion inventory.",
+        "sql": "WITH pain_theme_counts(pain_theme, signal_count, sample_size, discovery_implication) AS (SELECT 'Reconciliation / exception investigation', 11, 13, 'Lead with the last unexplained difference and required review evidence.' UNION ALL SELECT 'Spreadsheet or report fragility', 5, 13, 'Test schema drift, mapping memory and unchanged management-pack formats.' UNION ALL SELECT 'Multiple systems or schema drift', 5, 13, 'Qualify candidates with two or more recurring source systems.' UNION ALL SELECT 'Cost or implementation friction', 5, 13, 'Position a bounded local pilot, not a replacement implementation.' UNION ALL SELECT 'Payout components, fees, refunds or cutoff', 4, 13, 'Test residual multi-channel exceptions after standard connectors.' UNION ALL SELECT 'Multi-currency or cross-border complexity', 4, 13, 'Validate approved rate policy and transaction/base/reporting currency authority.') SELECT pain_theme, signal_count, sample_size, discovery_implication FROM pain_theme_counts ORDER BY signal_count DESC, pain_theme;",
+        "tables_used": [
+          "pain_theme_counts CTE derived from docs/market_validation/source_notes.md"
+        ],
+        "filters": [
+          "13 distinct public Reddit discussions reviewed on 2026-08-24",
+          "posts published from 2025 through August 2026",
+          "overlapping theme tags; counts are not mutually exclusive"
+        ],
+        "metric_definitions": [
+          "signal_count is the number of reviewed discussions manually tagged with the pain theme",
+          "sample_size is 13 distinct discussions; theme counts do not sum to sample_size because tags overlap"
+        ]
+      }
+    },
+    {
+      "id": "playbook",
+      "label": "FinCompiler market-validation playbook",
+      "path": "docs/market_validation/PLAYBOOK.md"
+    },
+    {
+      "id": "repo",
+      "label": "FinCompiler v0.4 implementation and validation",
+      "path": "fincompiler"
+    }
+  ]
+}
