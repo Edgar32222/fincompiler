@@ -155,7 +155,7 @@ Reply rate, follower count, page views and compliments are diagnostic only. They
 
 ### Days 1-2: make the invitation credible
 
-1. Finalize a product-only X and Reddit identity.
+1. Finalize a product-only X and Reddit identity using [CHANNEL_SETUP.md](CHANNEL_SETUP.md).
 2. Publish a minimal public landing page with the local-first promise, a two-minute synthetic workflow, limitations and privacy terms.
 3. Provide one privacy-safe contact route controlled by the product identity.
 4. Prepare a 90-second screen recording using only synthetic data.
