@@ -10,7 +10,7 @@ from .models import CanonicalRecord, ExceptionItem, MappingProposal, SourceRef
 
 
 SCHEMAS = {
-    "sales": {"invoice_id", "line_id", "document_type", "date", "due_date", "status", "customer", "customer_id", "sku", "description", "quantity", "unit_price", "discount_amount", "tax_amount", "tax_rate", "gross_amount", "net_sales", "revenue_account", "unit_cost_local", "currency", "exchange_rate"},
+    "sales": {"invoice_id", "line_id", "document_type", "date", "due_date", "status", "customer", "customer_id", "sku", "description", "quantity", "unit_price", "discount_amount", "tax_amount", "freight_amount", "tax_rate", "gross_amount", "net_sales", "revenue_account", "unit_cost_local", "currency", "exchange_rate"},
     "gl": {"entry_id", "batch_id", "date", "account", "description", "reference", "amount", "debit_amount", "credit_amount", "currency", "exchange_rate", "accounting_currency_amount", "reporting_currency_amount", "legal_entity", "dimension"},
     "budget": {"period", "customer", "sku", "quantity", "unit_price", "revenue"},
 }
@@ -24,6 +24,7 @@ ALIASES = {
     "sales": "net_sales", "net sales": "net_sales", "net_sales": "net_sales",
     "amount": "amount", "value": "amount", "revenue": "revenue", "account": "account",
     "reference": "reference", "invoice ref": "reference", "currency": "currency",
+    "freight": "freight_amount", "freight amount": "freight_amount", "freight_amount": "freight_amount",
 }
 
 

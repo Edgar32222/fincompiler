@@ -111,8 +111,14 @@ def render() -> None:
     recon_columns[0].metric("Sales", reconciliation["sales_total"]["value"])
     recon_columns[1].metric("GL revenue", reconciliation["gl_total"]["value"])
     recon_columns[2].metric("Difference", reconciliation["variance"])
+    attribution = reconciliation.get("attribution", {})
+    if attribution:
+        st.caption(f"Deterministically attributed: {attribution.get('percent', '0.00')}% · unexplained: {attribution.get('unexplained', '0.00')}")
     if reconciliation.get("causes"):
         st.dataframe(reconciliation["causes"], use_container_width=True, hide_index=True)
+    if reconciliation.get("match_groups"):
+        with st.expander(f"Matched groups ({len(reconciliation['match_groups'])})"):
+            st.dataframe(reconciliation["match_groups"], use_container_width=True, hide_index=True)
     st.subheader("Budget vs Actual / PVM")
     st.dataframe(report["pvm"]["segments"], use_container_width=True, hide_index=True)
     st.caption(f"Bridge check: {report['pvm']['totals']['bridge_check']}")

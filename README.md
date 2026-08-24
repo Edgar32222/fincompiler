@@ -11,7 +11,7 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 - Every aggregate carries file, sheet, row, source field and raw value lineage.
 - Recognized Xero, QuickBooks, Business Central and Dynamics field sets use explicit source profiles backed by public vendor schemas.
 - Dates, currencies and numeric values are type-checked; locale-ambiguous dates are blocked rather than guessed.
-- Sales-to-GL reconciliation identifies invoice-level missing, unmatched and amount-mismatch causes.
+- Sales-to-GL reconciliation supports exact references, split postings, explicit merged batches, uniquely identifiable amount batches, credit notes, component differences and cross-period cut-off. Ambiguous allocations remain blocking exceptions.
 - Budget-vs-Actual PVM uses Python `Decimal`. An LLM may explain the resulting JSON, but never calculates or adjusts amounts.
 - A blocking reconciliation or unresolved mapping prevents output readiness.
 - Foreign-currency records use an explicit dated rate policy. Direct, inverse and cross-rate formulas retain provider, effective date, source and raw-response hash evidence.
@@ -57,7 +57,7 @@ Re-running the same schema uses persistent memory. New, removed or renamed colum
 
 ## Outputs
 
-`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation and the balanced PVM bridge. No source data leaves the machine.
+`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation match groups/attribution and the balanced PVM bridge. No source data leaves the machine.
 
 Full lineage is stored in an indexed `lineage-<run_id>.sqlite` file. Management Pack totals contain a stable lineage ID, input count and small preview. Retrieve a page without loading the entire history:
 

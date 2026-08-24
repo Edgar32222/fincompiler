@@ -24,7 +24,12 @@
 20. Dynamics-style accounting-currency amounts can establish the GL base while transaction amounts remain preserved.
 21. `demo/multicurrency_close` converts USD and CNY to AED, reconciles to zero and marks all five user tasks complete.
 22. The Streamlit sample workflow was browser-checked for first-run onboarding, task visibility, FX evidence and removal of non-actionable mapping noise.
+23. Multiple GL records carrying one invoice reference reconcile as a split posting without duplicate revenue.
+24. A merged posting naming multiple invoice references reconciles as one deterministic group.
+25. An amount-only batch is allocated only when one unique invoice subset balances; ambiguous subsets remain blocking missing/unmatched items.
+26. Tax, discount and freight-sized differences receive explicit component cause codes while preserving the residual.
+27. A matching invoice and GL reference in different periods raises `CROSS_PERIOD_CUTOFF` even when the total variance is zero.
 
 ## Boundaries
 
-The investigator currently uses invoice-reference exact matching. Credit-note allocation, many-to-many matching, full FX variance decomposition, returns/rebates, multi-period mix methodology and user authentication remain outside the current development build. ECB reference-rate refresh requires explicit use and is not an accounting-policy recommendation.
+The investigator now covers explicit split/merged postings, credit notes, bounded unique amount batches, component-sized differences and cross-period cut-off. It intentionally does not auto-allocate ambiguous subsets. General many-to-many optimization across large batches, credit-note application chains, full FX variance decomposition, returns/rebates, multi-period mix methodology and user authentication remain outside the current development build. ECB reference-rate refresh requires explicit use and is not an accounting-policy recommendation.

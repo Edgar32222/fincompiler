@@ -48,6 +48,20 @@ def test_perfect_scenario_is_reconciliation_ready(tmp_path):
     assert report["run_manifest"]["run_id"] in report["lineage_store"]
 
 
+def test_seeded_many_to_many_and_timing_scenario_is_explainable(tmp_path):
+    scenario_dir = tmp_path / "many_to_many"
+    generate_scenario(scenario_dir, seed=91, invoice_count=8, anomalies=["split_posting", "batch_posting", "tax_in_gl", "cross_period", "credit_note"])
+
+    report = compile_pack(scenario_dir, tmp_path / "output-many", tmp_path / "memory-many.json")
+
+    methods = {group["method"] for group in report["reconciliation"]["match_groups"]}
+    reasons = {cause["reason"] for cause in report["reconciliation"]["causes"]}
+    assert {"SPLIT_REFERENCE", "EXPLICIT_BATCH_REFERENCES"} <= methods
+    assert {"TAX_INCLUDED_IN_GL", "CROSS_PERIOD_CUTOFF"} <= reasons
+    assert report["reconciliation"]["attribution"]["percent"] == "100.00"
+    assert report["output_readiness"] == "BLOCKED"
+
+
 def test_run_id_is_content_deterministic_and_duplicates_block(tmp_path):
     scenario_dir = tmp_path / "duplicate"
     generate_scenario(scenario_dir, seed=99, invoice_count=5)
