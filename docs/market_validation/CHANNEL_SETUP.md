@@ -8,7 +8,8 @@ This document records public product-channel setup only. Login and recovery emai
 
 | Channel | Public handle | Verified public state | Readiness |
 | --- | --- | --- | --- |
-| X | `@Edgar37455925` | Account exists. Public display name was `WW.`, with no bio and no visible posts during the 2026-08-24 read-only review. | Not ready: rebrand before outreach. |
+| X, legacy | `@Edgar37455925` | Signed-in review found at least seven historical replies, including a location reference and interaction with adult/spam-like content. | Reject for FinCompiler outreach: do not rebrand this personal-history account. |
+| X, proposed product account | `@FinCompiler` | The public profile path returned "This account doesn't exist" during the 2026-08-24 signed-in check. This is a point-in-time availability signal, not a reserved username. | Preferred: founder should create a fresh product-only account before the handle is taken. |
 | Reddit | `u/FinCompiler` | Signed-in inspection confirmed a clean product-named account with no visible posts, comments, bio or social links. Search discoverability and following are enabled. | Ready for profile copy after approval; partner-based ad personalization should be disabled for privacy. |
 
 ## Recommended public identity
@@ -26,14 +27,14 @@ Do not publish a login or recovery email in either profile.
 
 ## X setup checklist
 
-1. Sign in to the correct account and confirm the public handle.
-2. Change the display name from `WW.` to `FinCompiler`.
-3. Replace the avatar with a product-only mark.
-4. Add the approved short bio.
-5. Leave location, birthday and employer blank.
-6. Disable discoverability by email and phone where available.
-7. Disable contact syncing and remove previously uploaded contacts where available.
-8. Review following and follower lists for obvious colleague or employer links before posting.
+1. Do not rename or reuse the legacy `@Edgar37455925` account for FinCompiler; its historical replies create avoidable identity and brand risk.
+2. Create a separate `@FinCompiler` account if X still reports the username as available at creation time.
+3. Do not reuse the legacy display name, avatar, following list, contacts or content history.
+4. Set the new display name to `FinCompiler` and use a product-only avatar.
+5. Add the approved short bio.
+6. Leave location, birthday and employer blank.
+7. Disable discoverability by email and phone where available.
+8. Do not sync contacts and do not follow colleagues, employer accounts or location-specific personal communities.
 9. Publish the evidence-led reconciliation thread only after a final content and account confirmation.
 10. Pin the thread only after it is live and has been checked from the public profile.
 
