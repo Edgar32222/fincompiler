@@ -43,6 +43,8 @@ def sign_off(run_dir: str | Path, reviewer: str, notes: str = "") -> dict:
         raise RuntimeError("run is already signed off")
     manifest = json.loads((directory / "run_manifest.json").read_text(encoding="utf-8"))
     pack = json.loads((directory / "management_pack.json").read_text(encoding="utf-8"))
+    if pack.get("output_readiness") != "READY":
+        raise RuntimeError("Run is blocked by unresolved control items and cannot be signed off.")
     if manifest["run_id"] != state["run_id"] or pack["run_manifest"]["run_id"] != state["run_id"]:
         raise RuntimeError("run ID mismatch between state, manifest and management pack")
     artifacts = {}
@@ -68,4 +70,3 @@ def verify_run(run_dir: str | Path) -> dict:
         if actual != expected:
             mismatches.append({"artifact": name, "expected": expected, "actual": actual})
     return {"valid": not mismatches, "run_id": state.get("run_id"), "reviewer": state.get("reviewer"), "mismatches": mismatches}
-

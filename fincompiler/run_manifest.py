@@ -16,11 +16,18 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
-def build_manifest(input_dir: str | Path, config: dict, config_path: str | Path | None = None, evidence_files: list[tuple[str, str | Path]] | None = None) -> dict:
+def build_manifest(
+    input_dir: str | Path,
+    config: dict,
+    config_path: str | Path | None = None,
+    evidence_files: list[tuple[str, str | Path]] | None = None,
+    dataset_files: dict[str, str | Path] | None = None,
+) -> dict:
     input_dir = Path(input_dir)
     sources = []
+    resolved_dataset_files = dataset_files or {dataset: input_dir / f"{dataset}.csv" for dataset in ("sales", "gl", "budget")}
     for dataset in ("sales", "gl", "budget"):
-        path = input_dir / f"{dataset}.csv"
+        path = Path(resolved_dataset_files[dataset])
         sources.append({"dataset": dataset, "file": str(path.resolve()), "sha256": sha256_file(path), "bytes": path.stat().st_size})
     for dataset, raw_path in evidence_files or []:
         path = Path(raw_path)

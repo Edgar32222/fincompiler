@@ -1,4 +1,4 @@
-# v0.4.0-alpha.1 release checklist
+# v0.5.0-alpha.1 release checklist
 
 ## Required and passing
 
@@ -20,6 +20,11 @@
 - [x] User-oriented month-end decision workflow.
 - [x] Sample, upload and prepared-folder onboarding modes.
 - [x] Tests, Docker definition, CI definition and security/privacy documentation.
+- [x] Role-based CSV/XLSX/XLSM upload without filename changes.
+- [x] Conservative missing/duplicate/inconsistent input blocking.
+- [x] Engine-enforced prevention of blocked-run sign-off.
+- [x] Self-contained readable HTML Management Pack.
+- [x] Double-click Windows start and stop launchers.
 
 ## Alpha limitations disclosed
 

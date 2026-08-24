@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0-alpha.1 — 2026-08-24
+
+- Rebuilt the local web workflow around choose, review, investigate, audit and sign-off steps.
+- Added role-based CSV/XLSX/XLSM upload staging without corrupting Excel files or requiring source filenames to be changed.
+- Added conservative input discovery, clear missing/duplicate file errors, empty-table checks and inconsistent-sheet blocking.
+- Prevented blocked runs from being signed off in both the UI and engine.
+- Added a self-contained readable HTML Management Pack alongside the JSON and SQLite evidence outputs.
+- Added double-click Windows start/stop launchers with first-run setup and hidden local server management.
+- Expanded automated coverage from 27 to 32 tests and browser-checked the redesigned sample workflow.
+
 ## 0.4.0-alpha.1 — 2026-08-24
 
 - Reframed the application around five month-end Finance user questions.

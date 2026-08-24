@@ -30,3 +30,10 @@ def test_signed_artifact_tampering_is_detected(tmp_path):
     assert result["valid"] is False
     assert result["mismatches"][0]["artifact"] == "management_pack.json"
 
+
+def test_blocked_run_cannot_be_signed_off(demo_dir, tmp_path):
+    output = tmp_path / "blocked-run"
+    report = compile_pack(demo_dir, output, tmp_path / "memory.json")
+    assert report["output_readiness"] == "BLOCKED"
+    with pytest.raises(RuntimeError, match="cannot be signed off"):
+        sign_off(output, "Finance Reviewer")

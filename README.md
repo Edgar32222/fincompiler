@@ -1,4 +1,4 @@
-# FinCompiler v0.4.0-alpha.1
+# FinCompiler v0.5.0-alpha.1
 
 > **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
 
@@ -17,7 +17,19 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 - Foreign-currency records use an explicit dated rate policy. Direct, inverse and cross-rate formulas retain provider, effective date, source and raw-response hash evidence.
 - ERP accounting-currency amounts can be used as posted accounting evidence when company policy explicitly allows it.
 
-## Quick start (Windows)
+## Start on Windows without using a terminal
+
+1. Keep the FinCompiler folder on your local drive.
+2. Double-click `Start FinCompiler.cmd`.
+3. On first use, FinCompiler creates its private Python environment, installs the required packages and runs its validation tests.
+4. Your browser opens at `http://127.0.0.1:8511`. Choose the sample company or upload one Sales, one GL and one Budget file.
+5. Double-click `Stop FinCompiler.cmd` when you finish.
+
+CSV, XLSX and XLSM input tables are supported. Uploads are selected by business role, so original filenames do not need to be changed. Prepared local folders use one explicitly named `sales`, `gl` and `budget` file; if both CSV and Excel versions exist, FinCompiler blocks the run instead of choosing silently.
+
+The result page provides an action plan, Sales-vs-GL investigation, deterministic Budget-vs-Actual bridge, applied FX evidence, paginated source trace, controlled sign-off and downloadable JSON plus a self-contained readable HTML Management Pack.
+
+## Command-line setup (advanced)
 
 The simplest path is `powershell -ExecutionPolicy Bypass -File scripts\setup.ps1`. It detects the standard Python launcher, `python`, or the Codex bundled Python runtime.
 
@@ -57,7 +69,7 @@ Re-running the same schema uses persistent memory. New, removed or renamed colum
 
 ## Outputs
 
-`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation match groups/attribution and the balanced PVM bridge. No source data leaves the machine.
+`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation match groups/attribution and the balanced PVM bridge. `management_pack.html` is a self-contained readable review pack that can be opened or printed without FinCompiler. No source data leaves the machine.
 
 Full lineage is stored in an indexed `lineage-<run_id>.sqlite` file. Management Pack totals contain a stable lineage ID, input count and small preview. Retrieve a page without loading the entire history:
 

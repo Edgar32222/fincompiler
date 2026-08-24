@@ -1,4 +1,4 @@
-# v0.4 validation record
+# v0.5 validation record
 
 ## Acceptance scenarios
 
@@ -29,6 +29,18 @@
 25. An amount-only batch is allocated only when one unique invoice subset balances; ambiguous subsets remain blocking missing/unmatched items.
 26. Tax, discount and freight-sized differences receive explicit component cause codes while preserving the residual.
 27. A matching invoice and GL reference in different periods raises `CROSS_PERIOD_CUTOFF` even when the total variance is zero.
+28. Mixed CSV and XLSX inputs compile in one run while preserving the actual source filename in the manifest.
+29. More than one explicitly named Sales, GL or Budget file is blocked rather than chosen silently.
+30. Excel uploads retain their workbook extension when staged under their selected business role.
+31. A blocked Management Pack cannot be signed off through the engine or web interface.
+32. Every run produces a self-contained HTML Management Pack containing readiness, deterministic differences and its run ID.
+
+## v0.5 local-product acceptance
+
+- `Start FinCompiler.cmd` launched the local app on a clean alternate port and returned HTTP 200.
+- `Stop FinCompiler.cmd` stopped only the recorded FinCompiler Python process.
+- The redesigned sample workflow was browser-checked from first screen to `READY`, including the five result tabs and both report downloads.
+- The full automated suite passes: 32 tests.
 
 ## Boundaries
 
