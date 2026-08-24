@@ -1,4 +1,4 @@
-# v0.6 validation record
+# v0.7 validation record
 
 ## Acceptance scenarios
 
@@ -38,6 +38,10 @@
 34. A 90-day ECB timeout falls back to the daily feed while retaining and displaying the original failure reason.
 35. A cached ECB reference book cannot enter an uploaded-file run until the company-policy approval checkbox is selected.
 36. Packaged resource and writable data roots remain separate when the portable runtime supplies explicit locations.
+37. A local exception ID remains stable across equivalent reruns; owner, working note, evidence reference and audit history persist.
+38. User actions cannot set a blocking exception to cleared; only a clean deterministic rerun records `CLEARED_BY_RERUN`.
+39. Every run produces a values-only Excel Management Pack with visible control checks, matched groups, compact FX applications, one-row-per-rate source evidence and preview lineage to file/sheet/row/field/raw value.
+40. The Excel Management Pack was imported with an independent spreadsheet engine, all 11 sheets rendered, and formula/error scans returned no records or spreadsheet errors.
 
 ## Windows portable-product acceptance
 
@@ -48,7 +52,7 @@
 - The actual double-click `FinCompiler.exe` launcher detected an occupied port, selected port 8512 and returned HTTP 200.
 - The packaged sample workflow completed 5/5 controls with `READY`, zero blocking items and zero Sales/GL difference.
 - Closing the packaged test processes released the selected local port.
-- The full automated suite passes: 36 tests.
+- The full automated suite passes: 39 tests.
 - A live UI fetch cached 1,885 ECB 90-day reference observations and displayed the explicit approval gate.
 
 ## Boundaries

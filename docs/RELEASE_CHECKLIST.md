@@ -1,4 +1,4 @@
-# v0.6.0-alpha.1 release checklist
+# v0.7.0-alpha.1 release checklist
 
 ## Required and passing
 
@@ -32,10 +32,18 @@
 - [x] Self-contained Windows x64 portable folder with no end-user Python dependency.
 - [x] Double-click control window, automatic browser open and local-server stop control.
 - [x] Packaged resource/data-root separation and end-to-end sample acceptance.
+- [x] Persistent exception owner/status/note/evidence history.
+- [x] System-only exception clearing after a clean deterministic rerun.
+- [x] Finance-ready values-only Excel Management Pack.
+- [x] Visible model-status and decomposed control checks.
+- [x] Excel reconciliation match groups and unresolved causes.
+- [x] Compact applied-FX table plus one-row-per-observation source evidence.
+- [x] Excel preview lineage to source file, sheet, row, field and raw value.
+- [x] Independent workbook import, formula/error scan and all-sheet visual render.
 
 ## Alpha limitations disclosed
 
-- [x] Exact-reference reconciliation only.
+- [x] Reconciliation is limited to documented deterministic patterns; general many-to-many optimization remains out of scope.
 - [x] No FX conversion without an explicit company policy and approved basis.
 - [x] ECB reference rates are opt-in cached evidence and remain informational.
 - [x] Mix remains a disclosed residual component.

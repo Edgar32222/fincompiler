@@ -5,6 +5,7 @@ from pathlib import Path
 
 from . import __version__
 from .config import FinanceConfig
+from .exception_workflow import initialize_exception_workflow
 from .fx import RateBook, establish_currency_basis
 from .integrity import duplicate_record_exceptions, duplicate_source_exceptions
 from .ingestion import discover_dataset_files, read_tabular
@@ -14,7 +15,7 @@ from .normalization import normalize_records
 from .pvm import investigate_pvm
 from .profiles import detect_profile
 from .reconciliation import investigate_sales_gl
-from .reporting import write_management_pack_html
+from .reporting import write_management_pack_excel, write_management_pack_html
 from .run_manifest import build_manifest
 from .run_state import assert_writable, initialize_draft
 from .workflow import build_close_workflow
@@ -75,13 +76,15 @@ def compile_pack(input_dir: str | Path, output_dir: str | Path, memory_path: str
         reconciliation["sales_total"] = lineage.store_calculation(f"{manifest['run_id']}:reconciliation:sales", "reconciliation", reconciliation["sales_total"])
         reconciliation["gl_total"] = lineage.store_calculation(f"{manifest['run_id']}:reconciliation:gl", "reconciliation", reconciliation["gl_total"])
         pvm["segments"] = [lineage.store_pvm_segment(f"{manifest['run_id']}:pvm:{index}", segment) for index, segment in enumerate(pvm["segments"])]
-    exception_dump = [e.__dict__ for e in all_exceptions]
+    exception_dump = [e.__dict__ for e in all_exceptions] + list(reconciliation.get("exceptions", []))
     output_readiness = "BLOCKED" if all_exceptions or reconciliation["status"] != "PASS" else "READY"
     fx_summary = {"base_currency": config.base_currency, "rate_type": config.fx_policy.rate_type, "rate_book": str(rate_book_path.resolve()) if rate_book_path else None, "converted_records": len(fx_applications), "missing_records": sum(item["code"] == "FX_RATE_REQUIRED" for item in exception_dump), "applications": fx_applications}
     workflow = build_close_workflow(exception_dump, reconciliation, pvm, fx_summary, output_readiness)
-    report = {"version": __version__, "run_manifest": manifest, "lineage_store": lineage_name, "management_pack_html": "management_pack.html", "configuration": config.jsonable(), "source_profiles": source_profiles, "mapping_proposals": proposal_dump, "exceptions": exception_dump, "fx": fx_summary, "reconciliation": reconciliation, "pvm": pvm, "close_workflow": workflow, "output_readiness": output_readiness}
+    exception_workflow = initialize_exception_workflow(output_dir, manifest["run_id"], exception_dump)
+    report = {"version": __version__, "run_manifest": manifest, "lineage_store": lineage_name, "management_pack_html": "management_pack.html", "management_pack_excel": "management_pack.xlsx", "exception_workflow_file": "exception_workflow.json", "exception_workflow_summary": {"active_count": exception_workflow["active_count"], "cleared_count": exception_workflow["cleared_count"], "trust_rule": exception_workflow["trust_rule"]}, "configuration": config.jsonable(), "source_profiles": source_profiles, "mapping_proposals": proposal_dump, "exceptions": exception_dump, "fx": fx_summary, "reconciliation": reconciliation, "pvm": pvm, "close_workflow": workflow, "output_readiness": output_readiness}
     (output_dir / "run_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
     (output_dir / "management_pack.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     write_management_pack_html(output_dir, report)
+    write_management_pack_excel(output_dir, report, exception_workflow)
     initialize_draft(output_dir, manifest["run_id"])
     return report

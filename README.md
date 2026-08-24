@@ -1,4 +1,4 @@
-# FinCompiler v0.6.0-alpha.1
+# FinCompiler v0.7.0-alpha.1
 
 > **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
 
@@ -16,10 +16,12 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 - A blocking reconciliation or unresolved mapping prevents output readiness.
 - Foreign-currency records use an explicit dated rate policy. Direct, inverse and cross-rate formulas retain provider, effective date, source and raw-response hash evidence.
 - ERP accounting-currency amounts can be used as posted accounting evidence when company policy explicitly allows it.
+- Exception handling is persisted locally with owner, status, note, evidence reference and audit history. A user can prepare an item for rerun but cannot mark a failed control as cleared.
+- Every run produces a Finance-ready values-only Excel Management Pack with visible control checks, matched and unmatched reconciliation records, PVM, FX source evidence, mapping decisions and file/sheet/row/field lineage.
 
 ## Start on Windows — no Python required
 
-1. Download `FinCompiler-0.6.0-alpha.1-windows-x64-portable.zip` and extract the whole ZIP to a local folder.
+1. Download `FinCompiler-0.7.0-alpha.1-windows-x64-portable.zip` and extract the whole ZIP to a local folder.
 2. Double-click `FinCompiler.exe`. Keep the small FinCompiler control window open while you work.
 3. Your browser opens automatically. Choose the sample company or upload one Sales, one GL and one Budget file.
 4. Click **Stop and close** in the control window when you finish.
@@ -28,7 +30,7 @@ The portable build includes its own runtime and dependencies. It does not instal
 
 CSV, XLSX and XLSM input tables are supported. Uploads are selected by business role, so original filenames do not need to be changed. Prepared local folders use one explicitly named `sales`, `gl` and `budget` file; if both CSV and Excel versions exist, FinCompiler blocks the run instead of choosing silently.
 
-The result page provides an action plan, Sales-vs-GL investigation, deterministic Budget-vs-Actual bridge, applied FX evidence, paginated source trace, controlled sign-off and downloadable JSON plus a self-contained readable HTML Management Pack.
+The result page provides an action plan, persistent exception ownership, Sales-vs-GL investigation, deterministic Budget-vs-Actual bridge, applied FX evidence, paginated source trace, controlled sign-off and downloadable Excel, JSON plus a self-contained readable HTML Management Pack.
 
 When uploading files without a prepared company-policy JSON, the UI now collects the entity name, accounting base currency, explicit GL revenue accounts and reconciliation tolerance. Foreign-currency rows remain blocked unless the user uploads a company-approved rate book or explicitly fetches, reviews and approves an ECB reference-rate cache for that analytical run. Fetching rates alone never approves or applies them.
 
@@ -74,7 +76,9 @@ Re-running the same schema uses persistent memory. New, removed or renamed colum
 
 ## Outputs
 
-`management_pack.json` contains a user-oriented month-end workflow, applied FX evidence, mapping proposals, exceptions, output readiness, source-backed reconciliation match groups/attribution and the balanced PVM bridge. `management_pack.html` is a self-contained readable review pack that can be opened or printed without FinCompiler. No source data leaves the machine.
+`management_pack.xlsx` is the primary Finance review pack. It contains a visible control-check sheet, action plan, persistent exception register, matched and unmatched Sales-vs-GL records, deterministic Budget-vs-Actual/PVM, applied rate evidence, rate-source hashes, mapping decisions and preview lineage down to file, sheet, row, field and raw value. Amounts are values produced by the deterministic engine; the workbook contains no formulas that can silently change them.
+
+`management_pack.json` contains the complete machine-readable workflow, while `management_pack.html` is a self-contained readable review pack that can be opened or printed without FinCompiler. `exception_workflow.json` preserves local owner/status/note/evidence history across reruns. No source data leaves the machine.
 
 Full lineage is stored in an indexed `lineage-<run_id>.sqlite` file. Management Pack totals contain a stable lineage ID, input count and small preview. Retrieve a page without loading the entire history:
 

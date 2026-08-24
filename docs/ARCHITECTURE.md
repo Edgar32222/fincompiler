@@ -20,10 +20,10 @@ canonical records ── type validation ── duplicate checks
    └── Budget ↔ Actual Decimal PVM bridge
               │
               ▼
-user close workflow + management_pack.json + indexed lineage SQLite
+user close workflow + persistent exception handling + indexed lineage SQLite
               │
               ▼
-draft → Finance sign-off → immutable hash verification
+Excel/HTML/JSON Management Pack → Finance sign-off → immutable hash verification
 ```
 
 The finance engine owns every numeric result. An LLM may be added later as a read-only explanation layer consuming signed deterministic outputs; it must never map uncertain fields, change amounts or clear exceptions.

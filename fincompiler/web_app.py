@@ -111,10 +111,12 @@ def render() -> None:
     import streamlit as st
 
     from . import __version__
+    from .exception_workflow import USER_STATUSES, read_exception_workflow, update_exception_item
     from .fx import CURRENCY_MINOR_UNITS, refresh_ecb_rate_book
     from .lineage_store import LineageStore
     from .mapping import MappingMemory, SCHEMAS
     from .pipeline import compile_pack
+    from .reporting import write_management_pack_excel
     from .run_state import sign_off, verify_run
 
     st.set_page_config(page_title="FinCompiler", page_icon="✓", layout="wide")
@@ -139,6 +141,13 @@ def render() -> None:
         approve_ecb_reference = False
         if source_mode == "Upload monthly files":
             st.caption("Choose each file by business role. Original filenames do not need to match FinCompiler names.")
+            with st.expander("What exports do I need?"):
+                st.markdown(
+                    "- **Sales detail:** one row per invoice or sales line, with date, customer, amount and a reference.\n"
+                    "- **General ledger:** revenue-account journal detail, including debit/credit or signed amount and reference.\n"
+                    "- **Budget:** customer/SKU plan with period, quantity, unit price or revenue.\n\n"
+                    "CSV, XLSX and XLSM are accepted. FinCompiler shows uncertain fields for review and never guesses them silently."
+                )
             upload_columns = st.columns(3)
             uploaded_files["sales"] = upload_columns[0].file_uploader(
                 "Sales detail · required", type=["csv", "xlsx", "xlsm"], help="Invoice or sales line detail."
@@ -207,12 +216,14 @@ def render() -> None:
             )
         else:
             input_dir = str(sample_input)
+            st.success("Recommended first step: run this prepared sample. Expected result: 5/5 controls complete and Sales/GL difference 0.00.")
             st.caption("The sample contains multi-currency Sales, Dynamics-style GL, Budget and approved rate evidence.")
 
         with st.expander("Advanced local storage options"):
             memory_file = st.text_input("Saved mapping memory", str(data_root / "mappings" / "memory.json"))
             output_folder = st.text_input("Local run folder", str(data_root / "output" / "demo-run"))
-        run_clicked = st.button("Run month-end check", type="primary", width="stretch")
+        run_label = "Run sample check" if source_mode == "Try the sample company" else "Run month-end check"
+        run_clicked = st.button(run_label, type="primary", width="stretch")
 
     if run_clicked:
         try:
@@ -280,24 +291,32 @@ def render() -> None:
     headline[2].metric("Blocking items", len(report["exceptions"]))
     headline[3].metric("Sales / GL difference", report["reconciliation"]["variance"])
 
-    download_columns = st.columns([1, 1, 2])
-    pack_bytes = json.dumps(report, indent=2, ensure_ascii=False).encode("utf-8")
+    download_columns = st.columns([1, 1, 1, 2])
+    excel_bytes = (active_output / report["management_pack_excel"]).read_bytes()
     download_columns[0].download_button(
-        "Download Management Pack",
+        "Download Excel pack",
+        excel_bytes,
+        file_name=f"fincompiler-{report['run_manifest']['run_id']}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        width="stretch",
+    )
+    pack_bytes = json.dumps(report, indent=2, ensure_ascii=False).encode("utf-8")
+    download_columns[1].download_button(
+        "Download audit JSON",
         pack_bytes,
         file_name=f"fincompiler-{report['run_manifest']['run_id']}.json",
         mime="application/json",
         width="stretch",
     )
     html_bytes = (active_output / report["management_pack_html"]).read_bytes()
-    download_columns[1].download_button(
+    download_columns[2].download_button(
         "Download readable HTML",
         html_bytes,
         file_name=f"fincompiler-{report['run_manifest']['run_id']}.html",
         mime="text/html",
         width="stretch",
     )
-    download_columns[2].caption(f"Run ID: {report['run_manifest']['run_id']}")
+    download_columns[3].caption(f"Run ID: {report['run_manifest']['run_id']}")
 
     action_tab, reconciliation_tab, performance_tab, audit_tab, signoff_tab = st.tabs(
         ["Action plan", "Sales vs GL", "Budget vs Actual", "Audit trail", "Finance sign-off"]
@@ -344,10 +363,69 @@ def render() -> None:
 
         if report["exceptions"]:
             st.subheader("Blocking control items")
-            for item in report["exceptions"]:
-                with st.expander(f"{item['severity']} · {item['code']} — {item['message']}"):
+            st.caption(
+                "Assign and document the work here. A user status never clears a Finance control; "
+                "only a deterministic rerun without the exception can clear it."
+            )
+            exception_state = read_exception_workflow(active_output) or {"items": []}
+            active_exception_items = [item for item in exception_state.get("items", []) if item.get("active")]
+            for item in active_exception_items:
+                item_id = item["exception_id"]
+                with st.expander(
+                    f"{item['severity']} · {item['code']} — {item['message']}",
+                    expanded=item.get("status") != "READY_TO_RERUN",
+                ):
                     st.warning(_exception_action(item["code"]))
-                    st.json(item["context"])
+                    tracker_columns = st.columns([2, 2, 2])
+                    status = tracker_columns[0].selectbox(
+                        "Handling status",
+                        USER_STATUSES,
+                        index=USER_STATUSES.index(item.get("status", "OPEN")),
+                        key=f"exception-status-{item_id}",
+                    )
+                    owner = tracker_columns[1].text_input(
+                        "Owner",
+                        value=item.get("owner", ""),
+                        key=f"exception-owner-{item_id}",
+                    )
+                    actor = tracker_columns[2].text_input(
+                        "Updated by",
+                        key=f"exception-actor-{item_id}",
+                        help="Used only in the local exception audit history.",
+                    )
+                    note = st.text_area(
+                        "Working note",
+                        value=item.get("note", ""),
+                        key=f"exception-note-{item_id}",
+                    )
+                    evidence_reference = st.text_input(
+                        "Evidence reference",
+                        value=item.get("evidence_reference", ""),
+                        key=f"exception-evidence-{item_id}",
+                        help="For example: corrected workbook name, ticket ID, journal batch or reviewer note. Do not paste secrets.",
+                    )
+                    if st.button("Save handling update", key=f"exception-save-{item_id}"):
+                        try:
+                            update_exception_item(
+                                active_output,
+                                item_id,
+                                status=status,
+                                owner=owner,
+                                note=note,
+                                evidence_reference=evidence_reference,
+                                actor=actor,
+                            )
+                            write_management_pack_excel(
+                                active_output,
+                                report,
+                                read_exception_workflow(active_output),
+                            )
+                            st.success("Saved locally. The blocking control remains active until a clean rerun.")
+                            st.rerun()
+                        except Exception as exc:
+                            st.error(str(exc))
+                    with st.expander("Source evidence"):
+                        st.json(item["context"])
 
         st.subheader("Currency basis")
         fx = report["fx"]
