@@ -31,9 +31,11 @@ These are public research signals, not verified CRM contacts. A handle or public
 
 1. r/Accounting and r/FPandA: ask for three private design partners after sharing a concrete reconciliation teardown, not a generic product pitch.
 2. r/Bookkeeping and Xero/QuickBooks communities: focus on multi-currency, marketplace payout, and external-Excel reconciliation workflows.
-3. LinkedIn finance-operations discussions: invite controllers who comment with a specific close bottleneck to a 30-minute workflow review.
-4. UAE finance and accounting communities: validate AED reporting, CBUAE/ERP rate policies, VAT evidence, Tally/QuickBooks/Xero exports, and Arabic/English headers.
-5. Fractional CFO and accounting advisory firms: one partner can expose several anonymized client data shapes and repeated close problems.
+3. X finance and accounting discussions: publish evidence-led reconciliation examples from a product-only account and invite people with a specific close bottleneck to a private workflow review.
+4. UAE finance and accounting communities that permit pseudonymous or product-brand participation: validate AED reporting, CBUAE/ERP rate policies, VAT evidence, Tally/QuickBooks/Xero exports, and Arabic/English headers.
+5. Fractional CFO and accounting advisory communities on Reddit and X: one partner can expose several anonymized client data shapes and repeated close problems.
+
+LinkedIn is explicitly out of scope for pilot recruitment. Do not view, follow, connect with, message, or otherwise engage prospects there from the founder's personal identity.
 
 ## Ethical outreach rule
 
@@ -42,6 +44,8 @@ These are public research signals, not verified CRM contacts. A handle or public
 - Ask for a discovery conversation or anonymized sample, not a sale.
 - Never scrape or infer personal email addresses, phone numbers, employer identity, or sensitive financial details.
 - Do not send bulk messages. Track opt-out and do not re-contact after a decline.
+- Use a FinCompiler product identity or pseudonymous founder identity; do not connect outreach activity to the founder's employer, colleagues, or personal LinkedIn profile.
+- Treat account login and recovery email addresses as private credentials. Never publish them in repository files, issues, posts, profiles, or outreach copy.
 
 ## Pilot offer
 
@@ -60,10 +64,10 @@ The pilot is successful only when two consecutive monthly cycles meet all of the
 ## Information still required before outreach
 
 - a product landing page or public demo link;
-- a founder identity/profile from which to contact people;
+- a pseudonymous founder or FinCompiler product profile on X and Reddit;
 - a short privacy statement and pilot data-handling agreement;
 - supported system/export list and explicit alpha limitations;
-- a calendar or email route for interested design partners;
+- a privacy-preserving direct-message or product contact route for interested design partners;
 - user approval of each first outreach batch.
 
 ## Coverage limitation
