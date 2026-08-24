@@ -58,4 +58,3 @@ Before any files are used, we will agree the anonymization, local storage locati
 - Do not mention the founder's employer or personal identity.
 - Do not use LinkedIn.
 - Send no more than one follow-up, and none after a decline or no-contact request.
-

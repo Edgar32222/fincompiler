@@ -48,4 +48,3 @@ If unexpected personal, payroll, credential, banking or other sensitive data is 
 ## Pilot exit
 
 Either party may stop the pilot. On exit, provide the user with their local outputs and delete or return any copy outside the agreed pilot machine according to the recorded retention decision.
-

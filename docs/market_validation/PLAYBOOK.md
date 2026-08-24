@@ -202,4 +202,3 @@ The current roadmap should prioritize features reaching Level 3 or 4. A loud pub
 3. Approve the exact first batch: one Reddit post, one X thread and up to five targeted invitations.
 4. Be available for five 30-minute discovery calls, or authorize a pseudonymous text-only interview format.
 5. Decide whether the pilot will be free for two cycles or use a refundable commitment deposit. Start free only if the user commits data, time and a second cycle.
-
