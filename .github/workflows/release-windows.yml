@@ -35,21 +35,46 @@ jobs:
         shell: pwsh
         run: .\scripts\build_windows_portable.ps1
 
+      - name: Resolve release metadata
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $version = $tag -replace '^v', ''
+          "TAG_NAME=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "VERSION_NAME=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "PACKAGE_NAME=FinCompiler-$version-windows-x64-portable.zip" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Package and hash
         shell: pwsh
         run: |
-          $name = "FinCompiler-0.7.0-alpha.1-windows-x64-portable.zip"
+          $name = $env:PACKAGE_NAME
           Compress-Archive -LiteralPath "dist-windows\FinCompiler" -DestinationPath $name -CompressionLevel Optimal
           (Get-FileHash -LiteralPath $name -Algorithm SHA256).Hash.ToLowerInvariant() + "  " + $name | Set-Content -LiteralPath "$name.sha256" -Encoding ascii
 
-      - name: Publish private-alpha release
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: FinCompiler-${{ github.ref_name }}-windows-x64-portable
+          path: |
+            ${{ env.PACKAGE_NAME }}
+            ${{ env.PACKAGE_NAME }}.sha256
+
+      - name: Publish prerelease
+        if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "v0.7.0-alpha.1" `
-            "FinCompiler-0.7.0-alpha.1-windows-x64-portable.zip" `
-            "FinCompiler-0.7.0-alpha.1-windows-x64-portable.zip.sha256" `
-            --title "FinCompiler v0.7.0-alpha.1" `
-            --notes-file "docs/RELEASE_NOTES_0.7.0-alpha.1.md" `
-            --prerelease
+          $notes = "docs/RELEASE_NOTES_$env:VERSION_NAME.md"
+          $assets = @($env:PACKAGE_NAME, "$env:PACKAGE_NAME.sha256")
+
+          if (gh release view $env:TAG_NAME *> $null) {
+            gh release upload $env:TAG_NAME @assets --clobber
+            gh release edit $env:TAG_NAME --title "FinCompiler $env:TAG_NAME" --prerelease
+          }
+          elseif (Test-Path -LiteralPath $notes) {
+            gh release create $env:TAG_NAME @assets --title "FinCompiler $env:TAG_NAME" --notes-file $notes --prerelease
+          }
+          else {
+            gh release create $env:TAG_NAME @assets --title "FinCompiler $env:TAG_NAME" --generate-notes --prerelease
+          }
