@@ -1,0 +1,3 @@
+Transaction ID,Value Date,Reference,Amount,Currency,Description
+BANK-001,2026-07-19,Amazon AMZ-ST-1001,980.00,USD,Amazon settlement deposit
+BANK-002,2026-07-15,Shopify SHP-P-2001,233.00,USD,Shopify Payments payout

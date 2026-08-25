@@ -26,7 +26,7 @@ def build_manifest(
     input_dir = Path(input_dir)
     sources = []
     resolved_dataset_files = dataset_files or {dataset: input_dir / f"{dataset}.csv" for dataset in ("sales", "gl", "budget")}
-    for dataset in ("sales", "gl", "budget"):
+    for dataset in resolved_dataset_files:
         path = Path(resolved_dataset_files[dataset])
         sources.append({"dataset": dataset, "file": str(path.resolve()), "sha256": sha256_file(path), "bytes": path.stat().st_size})
     for dataset, raw_path in evidence_files or []:

@@ -1,0 +1,4 @@
+settlement-id,settlement-start-date,settlement-end-date,deposit-date,total-amount,currency,transaction-type,order-id,marketplace-name,amount-type,amount-description,amount,posted-date,sku,quantity-purchased
+AMZ-ST-1001,2026-07-01,2026-07-15,2026-07-18,980.00,USD,Order,AMZ-ORDER-1,Amazon.com,ItemPrice,Principal,1200.00,2026-07-05,AMZ-A,10
+AMZ-ST-1001,2026-07-01,2026-07-15,2026-07-18,980.00,USD,Order,AMZ-ORDER-1,Amazon.com,ItemFees,Commission,-180.00,2026-07-05,AMZ-A,10
+AMZ-ST-1001,2026-07-01,2026-07-15,2026-07-18,980.00,USD,Refund,AMZ-ORDER-1,Amazon.com,ItemPrice,Principal,-40.00,2026-07-10,AMZ-A,0

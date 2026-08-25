@@ -1,4 +1,4 @@
-# v0.7 validation record
+# v0.8 validation record
 
 ## Acceptance scenarios
 
@@ -42,6 +42,15 @@
 38. User actions cannot set a blocking exception to cleared; only a clean deterministic rerun records `CLEARED_BY_RERUN`.
 39. Every run produces a values-only Excel Management Pack with visible control checks, matched groups, compact FX applications, one-row-per-rate source evidence and preview lineage to file/sheet/row/field/raw value.
 40. The Excel Management Pack was imported with an independent spreadsheet engine, all 11 sheets rendered, and formula/error scans returned no records or spreadsheet errors.
+41. Official-shape Amazon Settlement V2 rows reconcile one settlement total to one bank record by explicit settlement reference.
+42. Official-shape Shopify payout rows group by payout ID and reconcile paid Net to one bank receipt.
+43. Shopify order totals are allocated to SKU lines deterministically; taxes are excluded and order-linked payout fees/refunds are retained.
+44. Effective-dated purchase, freight, duty and other unit costs produce landed COGS; a missing SKU cost blocks true-profit readiness.
+45. A USD platform/cost dataset converts to AED through an approved dated local rate book and retains field-level rate evidence.
+46. A specific USD 5.00 Amazon settlement-to-bank difference is attributed to the settlement ID and bank transaction ID as `BANK_OR_PROCESSOR_DEDUCTION`.
+47. Amazon comma-only amounts such as `1200,00` are treated as locale-ambiguous and blocked, never silently scaled to 120,000.
+48. The cross-border Excel pack was independently imported and rendered; Summary is visible, amounts are numeric values and the formula scan returns no workbook formulas.
+49. Amazon settlement activity must add back to `total-amount`; an incomplete or altered detail export raises `SETTLEMENT_ACTIVITY_INCOMPLETE` even when the bank receipt matches.
 
 ## Windows portable-product acceptance
 
@@ -52,7 +61,7 @@
 - The actual double-click `FinCompiler.exe` launcher detected an occupied port, selected port 8512 and returned HTTP 200.
 - The packaged sample workflow completed 5/5 controls with `READY`, zero blocking items and zero Sales/GL difference.
 - Closing the packaged test processes released the selected local port.
-- The full automated suite passes: 39 tests.
+- The full automated suite passes: 45 tests.
 - A live UI fetch cached 1,885 ECB 90-day reference observations and displayed the explicit approval gate.
 
 ## Boundaries

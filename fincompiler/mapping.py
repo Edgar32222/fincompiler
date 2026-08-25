@@ -13,6 +13,11 @@ SCHEMAS = {
     "sales": {"invoice_id", "line_id", "document_type", "date", "due_date", "status", "customer", "customer_id", "sku", "description", "quantity", "unit_price", "discount_amount", "tax_amount", "freight_amount", "tax_rate", "gross_amount", "net_sales", "revenue_account", "unit_cost_local", "currency", "exchange_rate"},
     "gl": {"entry_id", "batch_id", "date", "account", "description", "reference", "amount", "debit_amount", "credit_amount", "currency", "exchange_rate", "accounting_currency_amount", "reporting_currency_amount", "legal_entity", "dimension"},
     "budget": {"period", "customer", "sku", "quantity", "unit_price", "revenue"},
+    "amazon_settlements": {"settlement_id", "settlement_start_date", "settlement_end_date", "payout_date", "settlement_total", "currency", "transaction_type", "order_id", "marketplace", "amount_type", "amount_description", "amount", "date", "posted_at", "sku", "quantity"},
+    "shopify_orders": {"order_id", "order_item_id", "date", "paid_date", "financial_status", "currency", "gross_sales", "discount_amount", "shipping_income", "tax_amount", "quantity", "sku", "description", "unit_price"},
+    "shopify_payouts": {"date", "transaction_type", "order_id", "payout_status", "payout_date", "gross_amount", "fee_amount", "net_amount", "currency", "payout_id", "bank_reference"},
+    "bank": {"bank_transaction_id", "date", "bank_reference", "amount", "currency", "description"},
+    "sku_costs": {"sku", "effective_date", "unit_purchase_cost", "unit_freight_cost", "unit_duty_cost", "other_unit_cost", "currency"},
 }
 
 ALIASES = {
@@ -25,6 +30,10 @@ ALIASES = {
     "amount": "amount", "value": "amount", "revenue": "revenue", "account": "account",
     "reference": "reference", "invoice ref": "reference", "currency": "currency",
     "freight": "freight_amount", "freight amount": "freight_amount", "freight_amount": "freight_amount",
+    "settlement id": "settlement_id", "settlement-id": "settlement_id", "payout id": "payout_id",
+    "order id": "order_id", "order-id": "order_id", "transaction date": "date", "payout date": "payout_date",
+    "bank reference": "bank_reference", "bank transaction id": "bank_transaction_id",
+    "fee": "fee_amount", "net": "net_amount", "type": "transaction_type",
 }
 
 
@@ -56,7 +65,7 @@ class MappingMemory:
             block["fingerprints"].append(fingerprint)
         self.save()
 
-    def propose(self, dataset: str, fields: list[str], profile_aliases: dict[str, str] | None = None, profile_name: str = "generic") -> tuple[list[MappingProposal], list[ExceptionItem]]:
+    def propose(self, dataset: str, fields: list[str], profile_aliases: dict[str, str] | None = None, profile_name: str = "generic", ignored_fields: frozenset[str] | None = None) -> tuple[list[MappingProposal], list[ExceptionItem]]:
         block = self.data["datasets"].get(dataset, {"mappings": {}, "fingerprints": []})
         current = schema_fingerprint(fields)
         exceptions = []
@@ -66,7 +75,9 @@ class MappingMemory:
         used = set()
         effective_aliases = {**ALIASES, **(profile_aliases or {})}
         for source in fields:
-            if source in block["mappings"]:
+            if source.strip().lower() in (ignored_fields or frozenset()):
+                target, confidence, status, reason = None, Decimal("1"), "IGNORED", f"explicitly unused {profile_name} field"
+            elif source in block["mappings"]:
                 target, confidence, status, reason = block["mappings"][source], Decimal("1"), "CONFIRMED", "persistent memory"
             else:
                 target = effective_aliases.get(source) or effective_aliases.get(source.strip().lower())
@@ -83,7 +94,8 @@ class MappingMemory:
 
 def apply_mapping(dataset: str, rows, proposals: list[MappingProposal]) -> tuple[list[CanonicalRecord], list[ExceptionItem]]:
     approved = {p.source_field: p.canonical_field for p in proposals if p.status in {"CONFIRMED", "PROPOSED"} and p.confidence >= Decimal("0.90")}
-    blocked = [asdict(p) for p in proposals if p.source_field not in approved]
+    ignored = {p.source_field for p in proposals if p.status == "IGNORED"}
+    blocked = [asdict(p) for p in proposals if p.source_field not in approved and p.source_field not in ignored]
     exceptions = []
     if blocked:
         exceptions.append(ExceptionItem("MAPPING_REVIEW_REQUIRED", "HIGH", "One or more fields were not mapped; no silent coercion was performed", {"fields": blocked}))
@@ -93,5 +105,9 @@ def apply_mapping(dataset: str, rows, proposals: list[MappingProposal]) -> tuple
         for source, canonical in approved.items():
             values[canonical] = row.get(source, "")
             lineage[canonical] = refs[source]
-        records.append(CanonicalRecord(dataset, values.get("invoice_id") or values.get("entry_id") or f"{dataset}-{index}", values, lineage))
+        identity = values.get("invoice_id") or values.get("entry_id") or values.get("bank_transaction_id")
+        if not identity:
+            parent = values.get("settlement_id") or values.get("payout_id") or values.get("order_id")
+            identity = f"{parent}:{index}" if parent else f"{dataset}-{index}"
+        records.append(CanonicalRecord(dataset, str(identity), values, lineage))
     return records, exceptions

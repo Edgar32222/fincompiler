@@ -1,8 +1,32 @@
-# FinCompiler v0.7.0-alpha.1
+# FinCompiler v0.8.0-alpha.1
 
 > **Alpha release:** suitable for local evaluation with synthetic or anonymized data. It is not an accounting system of record and does not replace Finance review.
 
-FinCompiler helps a Finance Manager answer five month-end questions: can I trust the files, are amounts comparable, why do Sales and GL differ, what drove performance, and can I publish the pack? It is local-first: source data, mapping memory, approved rates and outputs stay on the machine.
+FinCompiler is a local-first cash and profit compiler for finance teams and cross-border sellers. It now has two workflows:
+
+- **Cross-border cash & true profit:** Amazon Settlement V2 / Shopify orders and payouts → bank receipt matching → landed-cost SKU profit.
+- **Finance month-end:** Sales detail → GL revenue reconciliation → deterministic Budget-vs-Actual/PVM.
+
+Source data, mapping memory, approved rate evidence and outputs stay on the machine.
+
+## Cross-border seller quick start
+
+Open the Windows app and keep the default **跨境卖家真实利润** mode. Run the built-in HarborLight sample first, or upload:
+
+- `Amazon Settlement V2` and/or `Shopify payout CSV`;
+- a bank statement with transaction ID, value date, reference, amount and currency;
+- Shopify order CSV for order/SKU economics;
+- an effective-dated SKU landed-cost table for purchase, freight, duty and other unit cost.
+
+The result identifies each paid platform payout, the specific bank row used, the matching method, the exact residual and the reason when it does not balance. SKU profit is `revenue - platform fees - landed COGS`; missing cost and unattributable fees block a confident profit conclusion.
+
+Foreign-currency records never use a live rate silently. A user can upload an approved dated rate book or fetch an ECB reference-rate cache; provider, effective date, formula, source URL and raw-response hash are retained, and an explicit approval is required before an ECB cache enters the run.
+
+For a source checkout, the same workflow is available as:
+
+```powershell
+fincompiler run-commerce demo\cross_border_seller --output output\cross-border-demo
+```
 
 ## Trust rules
 
@@ -21,7 +45,7 @@ FinCompiler helps a Finance Manager answer five month-end questions: can I trust
 
 ## Start on Windows — no Python required
 
-1. Download `FinCompiler-0.7.0-alpha.1-windows-x64-portable.zip` and extract the whole ZIP to a local folder.
+1. Download the latest FinCompiler Windows portable ZIP and extract the whole ZIP to a local folder.
 2. Double-click `FinCompiler.exe`. Keep the small FinCompiler control window open while you work.
 3. Your browser opens automatically. Choose the sample company or upload one Sales, one GL and one Budget file.
 4. Click **Stop and close** in the control window when you finish.

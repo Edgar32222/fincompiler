@@ -54,7 +54,7 @@ def compile_pack(input_dir: str | Path, output_dir: str | Path, memory_path: str
             )
         profile = detect_profile(dataset, fields)
         source_profiles[dataset] = profile.name if profile else "generic"
-        proposals, exceptions = memory.propose(dataset, fields, profile.aliases if profile else None, profile.name if profile else "generic")
+        proposals, exceptions = memory.propose(dataset, fields, profile.aliases if profile else None, profile.name if profile else "generic", profile.ignored_fields if profile else None)
         records, mapping_exceptions = apply_mapping(dataset, rows, proposals)
         records, type_exceptions = normalize_records(records)
         all_records[dataset] = records

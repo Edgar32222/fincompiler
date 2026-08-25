@@ -1,0 +1,2 @@
+Name,Financial Status,Created at,Currency,Total,Discount Amount,Shipping,Taxes,Lineitem quantity,Lineitem SKU,Lineitem name,Lineitem price
+#S1001,paid,2026-07-11,USD,240.00,0.00,20.00,20.00,2,SHP-B,Travel Adapter,110.00

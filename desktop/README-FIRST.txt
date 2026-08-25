@@ -6,6 +6,10 @@ FinCompiler for Windows (portable)
 3. Keep the small FinCompiler control window open while using the browser app.
 4. Close that control window, or click "Stop and close", when finished.
 
+The default workflow is for cross-border sellers: Amazon/Shopify platform
+exports -> bank receipt verification -> landed-cost SKU profit. A second mode
+keeps the Finance Sales -> GL -> Budget/PVM month-end workflow.
+
 If Windows SmartScreen appears, check that the file came from the official
 FinCompiler release. This private-alpha executable is not code-signed yet.
 
@@ -13,5 +17,5 @@ Your uploads, mapping memory, rate cache and outputs are written to the
 "FinCompiler Data" folder next to the executable. They are not uploaded by
 FinCompiler.
 
-This is a private alpha for synthetic or anonymized pilot data. It is not an
+This is a public alpha for synthetic or anonymized pilot data. It is not an
 accounting system of record and does not replace Finance review.

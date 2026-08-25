@@ -8,7 +8,11 @@ from decimal import Decimal
 from pathlib import Path
 
 
-DATASET_LABELS = {"sales": "Sales detail", "gl": "General ledger", "budget": "Budget"}
+DATASET_LABELS = {
+    "sales": "Sales detail", "gl": "General ledger", "budget": "Budget",
+    "amazon_settlements": "Amazon Settlement V2", "shopify_orders": "Shopify orders",
+    "shopify_payouts": "Shopify payouts", "bank": "Bank statement", "sku_costs": "SKU landed costs",
+}
 
 
 def _resource_root() -> Path:
@@ -107,6 +111,105 @@ def _status_icon(status: str) -> str:
     return "✅" if status in {"COMPLETE", "NOT_NEEDED"} else "⚠️"
 
 
+def _render_commerce(st, resource_root: Path, data_root: Path) -> None:
+    from .commerce import compile_commerce_pack
+    from .fx import CURRENCY_MINOR_UNITS, refresh_ecb_rate_book
+
+    st.title("FinCompiler · 跨境卖家真实利润")
+    st.caption("平台订单 / 结算 → 收款 → 银行到账 → SKU 落地利润")
+    st.info("本地优先：文件、汇率依据、字段确认和输出都留在这台电脑。计算使用确定性引擎，AI 只能解释结果。")
+    source_mode = st.radio("从哪里开始？", ["运行内置示例", "上传我的导出文件", "使用本地文件夹"], horizontal=True)
+    input_dir: Path
+    workspace: Path | None = None
+    if source_mode == "运行内置示例":
+        input_dir = resource_root / "demo" / "cross_border_seller"
+        st.success("示例包含 Amazon Settlement V2、Shopify 订单/payout、银行流水和 SKU 落地成本。预期：全部通过。")
+    elif source_mode == "使用本地文件夹":
+        input_dir = Path(st.text_input("数据文件夹", str(resource_root / "demo" / "cross_border_seller")))
+        st.caption("文件名可为 amazon_settlements、shopify_orders、shopify_payouts、bank、sku_costs；支持 CSV/XLSX。银行文件必需，Amazon 或 Shopify 至少一种。")
+    else:
+        st.markdown("#### 选择平台、银行和成本文件")
+        cols = st.columns(2)
+        uploaded = {
+            "amazon_settlements": cols[0].file_uploader("Amazon Settlement V2（可选）", type=["csv", "xlsx", "xlsm"]),
+            "shopify_orders": cols[1].file_uploader("Shopify 订单 CSV（建议）", type=["csv", "xlsx", "xlsm"]),
+            "shopify_payouts": cols[0].file_uploader("Shopify payout CSV（可选）", type=["csv", "xlsx", "xlsm"]),
+            "bank": cols[1].file_uploader("银行流水（必需）", type=["csv", "xlsx", "xlsm"]),
+            "sku_costs": cols[0].file_uploader("SKU 落地成本（建议）", type=["csv", "xlsx", "xlsm"]),
+        }
+        currencies = sorted(CURRENCY_MINOR_UNITS)
+        base_currency = cols[1].selectbox("管理报表币种", currencies, index=currencies.index("USD"))
+        business_name = cols[0].text_input("店铺 / 公司名称", "My cross-border business")
+        match_window = cols[1].number_input("到账匹配窗口（天）", min_value=0, max_value=31, value=7)
+        rate_source = st.selectbox("外币换算依据", ["外币时先拦截，由我提供汇率", "上传公司认可的汇率表", "获取并审核 ECB 参考汇率"])
+        rate_book_value = None
+        rate_type = "transaction"
+        if rate_source == "上传公司认可的汇率表":
+            uploaded["fx_rates"] = st.file_uploader("公司认可的汇率表", type=["csv"])
+            if uploaded["fx_rates"] is None:
+                st.warning("请上传汇率表；未提供的外币记录将被拦截。")
+        elif rate_source == "获取并审核 ECB 参考汇率":
+            st.caption("FinCompiler 可自动下载 ECB 参考汇率并保留来源、日期和原始响应哈希；参考汇率是否适合你的管理口径仍需你确认。")
+            if st.button("获取最新 90 天 ECB 参考汇率"):
+                try:
+                    st.session_state.commerce_ecb = _refresh_ecb_with_fallback(data_root / ".fincompiler" / "rates" / "ecb-reference.csv", refresh_ecb_rate_book)
+                except Exception as exc:
+                    st.error(str(exc))
+            if "commerce_ecb" in st.session_state:
+                evidence = st.session_state.commerce_ecb
+                st.success(f"已缓存 {evidence['observations']} 条汇率观察值，获取时间 {evidence['fetched_at']}")
+                approved = st.checkbox("我确认本次经营分析允许使用该 ECB 参考汇率。")
+                if approved:
+                    rate_book_value = str((data_root / ".fincompiler" / "rates" / "ecb-reference.csv").resolve())
+                    rate_type = "reference"
+        if uploaded["bank"] is None or not (uploaded["amazon_settlements"] or uploaded["shopify_payouts"]):
+            st.warning("请先上传银行流水，并至少上传 Amazon Settlement 或 Shopify payout。")
+            return
+        workspace = _stage_uploads(uploaded)
+        if uploaded.get("fx_rates") is not None:
+            rate_book_value = "fx_rates.csv"
+        (workspace / "commerce_config.json").write_text(json.dumps({
+            "business_name": business_name,
+            "base_currency": base_currency,
+            "reconciliation_tolerance": "0.01",
+            "bank_match_window_days": int(match_window),
+            "fx_rate_book": rate_book_value,
+            "fx_policy": {"rate_type": rate_type, "max_lookback_days": 7, "allow_inverse": True, "allow_cross": True, "triangulation_currency": "EUR"},
+        }, indent=2, ensure_ascii=False), encoding="utf-8")
+        input_dir = workspace
+    if st.button("开始核对并计算真实利润", type="primary", width="stretch"):
+        try:
+            identity = hashlib.sha256(str(input_dir.resolve()).encode()).hexdigest()[:12]
+            output_dir = data_root / ".fincompiler" / "commerce-runs" / identity
+            report = compile_commerce_pack(input_dir, output_dir, data_root / ".fincompiler" / "mappings" / "commerce-memory.json")
+            st.session_state.commerce_report = report
+            st.session_state.commerce_output_dir = str(output_dir)
+        except Exception as exc:
+            st.error(str(exc))
+    report = st.session_state.get("commerce_report")
+    if not report:
+        return
+    st.markdown("### 核对结果")
+    readiness = report["output_readiness"]
+    (st.success if readiness == "READY" else st.error)("可以用于经营复核" if readiness == "READY" else "存在必须处理的差异，系统没有自动修正")
+    metrics = st.columns(4)
+    metrics[0].metric("到账批次", len(report["payout_reconciliation"]))
+    metrics[1].metric("已核对通过", sum(item["status"] == "PASS" for item in report["payout_reconciliation"]))
+    metrics[2].metric("待处理异常", len(report["exceptions"]))
+    metrics[3].metric("SKU 结果", len(report["sku_profitability"]))
+    st.markdown("#### 平台结算 ↔ 银行到账")
+    st.dataframe(report["payout_reconciliation"], width="stretch", hide_index=True)
+    st.markdown("#### SKU 真实利润")
+    st.dataframe(report["sku_profitability"], width="stretch", hide_index=True)
+    if report["exceptions"]:
+        st.markdown("#### 需要你处理")
+        st.dataframe(report["exceptions"], width="stretch", hide_index=True)
+    output_dir = Path(st.session_state.commerce_output_dir)
+    download_cols = st.columns(2)
+    download_cols[0].download_button("下载 Excel 复核包", (output_dir / "commerce_pack.xlsx").read_bytes(), "FinCompiler-commerce-pack.xlsx")
+    download_cols[1].download_button("下载完整 JSON 证据", (output_dir / "commerce_pack.json").read_bytes(), "FinCompiler-commerce-pack.json")
+
+
 def render() -> None:
     import streamlit as st
 
@@ -120,11 +223,15 @@ def render() -> None:
     from .run_state import sign_off, verify_run
 
     st.set_page_config(page_title="FinCompiler", page_icon="✓", layout="wide")
+    resource_root = _resource_root()
+    data_root = _data_root()
+    workflow_mode = st.sidebar.radio("工作模式 / Workflow", ["跨境卖家真实利润", "企业月结 Sales ↔ GL"])
+    if workflow_mode == "跨境卖家真实利润":
+        _render_commerce(st, resource_root, data_root)
+        return
     st.title("FinCompiler")
     st.caption(f"Month-end reconciliation and performance investigation · v{__version__}")
     st.info("Local-first: your files, mapping decisions, exchange-rate evidence and outputs stay on this computer.")
-    resource_root = _resource_root()
-    data_root = _data_root()
     sample_input = resource_root / "demo" / "multicurrency_close"
 
     if "report" not in st.session_state:

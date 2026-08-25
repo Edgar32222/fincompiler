@@ -1,0 +1,6 @@
+{
+  "business_name": "HarborLight Commerce",
+  "base_currency": "USD",
+  "reconciliation_tolerance": "0.01",
+  "bank_match_window_days": 7
+}

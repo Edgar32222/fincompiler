@@ -1,4 +1,4 @@
-# v0.7.0-alpha.1 release checklist
+# v0.8.0-alpha.1 release checklist
 
 ## Required and passing
 
@@ -40,6 +40,16 @@
 - [x] Compact applied-FX table plus one-row-per-observation source evidence.
 - [x] Excel preview lineage to source file, sheet, row, field and raw value.
 - [x] Independent workbook import, formula/error scan and all-sheet visual render.
+- [x] Amazon Settlement V2 official-shape import and explicit unused-field treatment.
+- [x] Shopify order and payout official-shape import.
+- [x] Paid payout-to-bank matching by reference, unique amount or unique date-window candidate.
+- [x] Exact payout/bank residual and record-level cause attribution without auto-adjustment.
+- [x] Deterministic Shopify line allocation and Amazon activity classification.
+- [x] Effective-dated purchase/freight/duty/other landed cost and SKU profit.
+- [x] Missing cost, unknown Amazon activity and unattributable fee gates.
+- [x] Commerce FX conversion with approved local book or explicitly approved ECB cache.
+- [x] Chinese-first non-technical cross-border mode in the Windows UI.
+- [x] Values-only cross-border Excel pack with payout, profit, exception and source-lineage sheets.
 
 ## Alpha limitations disclosed
 
@@ -51,3 +61,5 @@
 - [x] No real-enterprise compatibility claim before anonymized pilots.
 - [x] Recommended evaluation ceiling documented from the current benchmark.
 - [x] Unsigned-executable SmartScreen risk disclosed before public distribution.
+- [x] No claim of Amazon/Shopify API connection; current release consumes exports only.
+- [x] VAT/GST, ads, inventory ledger and store-level-to-SKU fee allocation boundaries disclosed.
